@@ -20,7 +20,7 @@ public class UserController extends AbstractController {
     @PostMapping("/user/auth")
     public UserWithoutPassAndIsAdminDTO login(@RequestBody LoginDTO loginDTO, HttpServletRequest req) {
         UserWithoutPassAndIsAdminDTO resultUser = userService.login(loginDTO);
-        System.out.println("here");
+
         if (resultUser != null) {
             loginUser(req, resultUser.getId());
             return resultUser;
@@ -37,7 +37,6 @@ public class UserController extends AbstractController {
 
     @PostMapping("/users")
     public UserWithoutPassAndIsAdminDTO registerUser(@RequestBody RegisterDTO userForRegistration) {
-        System.out.println(userForRegistration.toString()); // for debugging
         return userService.registerUser(userForRegistration);
     }
 

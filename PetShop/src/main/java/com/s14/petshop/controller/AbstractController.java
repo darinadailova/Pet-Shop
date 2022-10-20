@@ -63,11 +63,12 @@ public abstract class AbstractController {
         String IP = request.getRemoteAddr();
 
         boolean isLoggedOut = session.getAttribute(LOGGED) == null;
+        boolean sessionExpired = (boolean) session.getAttribute(LOGGED);
         boolean isLoggedFromTheSameIP = false;
         if (session.getAttribute(REMOTE_IP) != null) {
             isLoggedFromTheSameIP = session.getAttribute(REMOTE_IP).equals(IP);
         }
-        if(session.isNew() || isLoggedOut || !isLoggedFromTheSameIP){
+        if(session.isNew() || isLoggedOut || !isLoggedFromTheSameIP || sessionExpired){
             throw new UnauthorizedException("You have to login!");
         }
         return (int) session.getAttribute(USER_ID);
