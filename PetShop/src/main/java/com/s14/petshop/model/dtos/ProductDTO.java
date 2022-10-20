@@ -1,8 +1,8 @@
 package com.s14.petshop.model.dtos;
 
-import com.s14.petshop.model.beans.Brand;
-import com.s14.petshop.model.beans.Discount;
-import com.s14.petshop.model.beans.Subcategory;
+//import com.s14.petshop.model.beans.Brand;
+//import com.s14.petshop.model.beans.Discount;
+//import com.s14.petshop.model.beans.Subcategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +16,7 @@ public class ProductDTO {
     private String name;
     private double price;
     private String info;
-    private Subcategory subcategory;
-    private Brand brand;
-    private Discount discount;
+//    private Subcategory subcategory;
+//    private Brand brand;
+//    private Discount discount;
 }

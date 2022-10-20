@@ -4,6 +4,7 @@ import com.s14.petshop.model.dtos.user.LoginDTO;
 import com.s14.petshop.model.dtos.user.RegisterDTO;
 import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
+import com.s14.petshop.model.exceptions.UnauthorizedException;
 import com.s14.petshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,11 @@ public class UserController extends AbstractController {
     public UserWithoutPassAndIsAdminDTO login(@RequestBody LoginDTO loginDTO, HttpServletRequest req) {
         UserWithoutPassAndIsAdminDTO resultUser = userService.login(loginDTO);
         System.out.println("here");
-        if(resultUser != null){
+        if (resultUser != null) {
             loginUser(req, resultUser.getId());
             return resultUser;
         }
-        else{
+        else {
             throw new BadRequestException("Wrong Credentials");
         }
     }
@@ -36,7 +37,18 @@ public class UserController extends AbstractController {
 
     @PostMapping("/users")
     public UserWithoutPassAndIsAdminDTO registerUser(@RequestBody RegisterDTO userForRegistration) {
-        System.out.println("object" + userForRegistration.toString());
+        System.out.println(userForRegistration.toString()); // for debugging
         return userService.registerUser(userForRegistration);
+    }
+
+    @GetMapping("/user/profile")
+    public UserWithoutPassAndIsAdminDTO showUserProfile(HttpServletRequest request) {
+        int id = getUserId(request);
+        if (id < 1) {
+            throw new UnauthorizedException("You have to login!");
+        }
+        else {
+            return getUserById(id);
+        }
     }
 }

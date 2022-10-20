@@ -21,14 +21,14 @@ public class ProductController extends AbstractController {
     }
 
     @DeleteMapping("/products/{pid}")
-    public void deleteProduct(@PathVariable  int pid){
+    public void deleteProduct(@PathVariable int pid) {
         //todo validate login
         //todo validate admin
 
     }
 
     @PostMapping("/products")
-    public ProductDTO addProduct (@RequestBody ProductDTO dto){
+    public ProductDTO addProduct(@RequestBody ProductDTO dto) {
         //todo validate login
         //todo validate admin
 

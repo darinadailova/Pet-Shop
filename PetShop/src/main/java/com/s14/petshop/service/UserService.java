@@ -19,8 +19,7 @@ public class UserService extends AbstractService {
         Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
         if (user.isPresent()) {
             return modelMapper.map(user, UserWithoutPassAndIsAdminDTO.class);
-        }
-        else {
+        } else {
             throw new BadRequestException("Wrong credentials!");
         }
     }
@@ -46,8 +45,7 @@ public class UserService extends AbstractService {
         Optional<User> result = userRepository.getById(uid);
         if (result != null) {
             return modelMapper.map(result, UserWithoutPassAndIsAdminDTO.class);
-        }
-        else {
+        } else {
             throw new NotFoundException("User not found!");
         }
     }

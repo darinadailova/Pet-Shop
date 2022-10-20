@@ -41,6 +41,7 @@ public abstract class AbstractController {
     public ErrorDTO handleOtherExceptions(Exception e) {
         return createError(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     private ErrorDTO createError(Exception e, HttpStatus status) {
         e.printStackTrace();
         ErrorDTO error = new ErrorDTO();
@@ -50,10 +51,25 @@ public abstract class AbstractController {
         return error;
     }
 
-    public void loginUser(HttpServletRequest request, int id){
+    public void loginUser(HttpServletRequest request, int id) {
         HttpSession session = request.getSession();
         session.setAttribute(LOGGED, true);
         session.setAttribute(USER_ID, id);
         session.setAttribute(REMOTE_IP, request.getRemoteAddr());
+    }
+
+    public int getUserId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String IP = request.getRemoteAddr();
+
+        boolean isLoggedOut = session.getAttribute(LOGGED) == null;
+        boolean isLoggedFromTheSameIP = false;
+        if (session.getAttribute(REMOTE_IP) != null) {
+            isLoggedFromTheSameIP = session.getAttribute(REMOTE_IP).equals(IP);
+        }
+        if(session.isNew() || isLoggedOut || !isLoggedFromTheSameIP){
+            throw new UnauthorizedException("You have to login!");
+        }
+        return (int) session.getAttribute(USER_ID);
     }
 }
