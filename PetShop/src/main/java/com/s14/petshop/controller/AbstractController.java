@@ -8,9 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 public abstract class AbstractController {
+
+    public static final String LOGGED = "LOGGED";
+    public static final String USER_ID = "USER_ID";
+    public static final String REMOTE_IP = "REMOTE_IP";
 
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -36,10 +42,18 @@ public abstract class AbstractController {
         return createError(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     private ErrorDTO createError(Exception e, HttpStatus status) {
+        e.printStackTrace();
         ErrorDTO error = new ErrorDTO();
         error.setMessage(e.getMessage());
         error.setDataAndTime(LocalDateTime.now());
         error.setStatus(status.value());
         return error;
+    }
+
+    public void loginUser(HttpServletRequest request, int id){
+        HttpSession session = request.getSession();
+        session.setAttribute(LOGGED, true);
+        session.setAttribute(USER_ID, id);
+        session.setAttribute(REMOTE_IP, request.getRemoteAddr());
     }
 }
