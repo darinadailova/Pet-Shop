@@ -1,6 +1,7 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.User;
+import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.user.LoginDTO;
 import com.s14.petshop.model.dtos.user.RegisterDTO;
 import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
@@ -9,22 +10,28 @@ import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService extends AbstractService {
     public UserWithoutPassAndIsAdminDTO login(LoginDTO loginDTO) {
-        if (!isValidEmail(loginDTO.getEmail()) || !isValidPassword(loginDTO)) {
+        if (!emailExistInDB(loginDTO.getEmail()) || !isCorrectPassword(loginDTO)) {
             throw new BadRequestException("Wrong credentials!");
         }
         Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
         if (user.isPresent()) {
-            return modelMapper.map(user, UserWithoutPassAndIsAdminDTO.class);
+            UserWithoutPassAndIsAdminDTO u = modelMapper.map(user, UserWithoutPassAndIsAdminDTO.class);
+            u.setAddresses(u.getAddresses().stream().
+                    map(a -> modelMapper.map(a, AddressWithoutOwnerDTO.class)).collect(Collectors.toList()));
+            // todo get reviews
+            return u;
         } else {
             throw new BadRequestException("Wrong credentials!");
         }
     }
 
-    private boolean isValidPassword(LoginDTO loginDTO) {
+    private boolean isCorrectPassword(LoginDTO loginDTO) {
+        // todo method that checks for upper-case letter, special symbol...
         Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
         if (loginDTO.getPassword().equals(user.get().getPassword())) {
             return true;
@@ -32,8 +39,8 @@ public class UserService extends AbstractService {
         return false;
     }
 
-    private boolean isValidEmail(String email) {
-        // todo validate email with regex
+    private boolean emailExistInDB(String email) {
+        // todo method for validating email with regex
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             return true;
@@ -43,7 +50,7 @@ public class UserService extends AbstractService {
 
     public UserWithoutPassAndIsAdminDTO getById(int uid) {
         Optional<User> result = userRepository.getById(uid);
-        if (result != null) {
+        if (result.isPresent()) {
             return modelMapper.map(result, UserWithoutPassAndIsAdminDTO.class);
         } else {
             throw new NotFoundException("User not found!");
@@ -52,8 +59,10 @@ public class UserService extends AbstractService {
 
     public UserWithoutPassAndIsAdminDTO registerUser(RegisterDTO userForRegistration) {
         if (!userForRegistration.getPassword().equals(userForRegistration.getConfirmPassword())) {
-            System.out.println(userForRegistration.getPassword() + " " + userForRegistration.getConfirmPassword());
             throw new BadRequestException("The passwords don't match!");
+        }
+        if (emailExistInDB(userForRegistration.getEmail())) {
+            throw new BadRequestException("Bad request");
         }
         // todo validate if the password has all symbols needed for example has a upper later and special symbol...
         // todo hash password before saving the user in DB

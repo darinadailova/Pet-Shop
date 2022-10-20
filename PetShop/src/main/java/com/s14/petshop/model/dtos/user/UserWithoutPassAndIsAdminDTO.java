@@ -2,6 +2,7 @@ package com.s14.petshop.model.dtos.user;
 
 import com.s14.petshop.model.beans.Address;
 import com.s14.petshop.model.beans.Review;
+import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
 import lombok.Data;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public class UserWithoutPassAndIsAdminDTO {
     private String phoneNumber;
     private String gender;
     private boolean isSubscribed;
-    private List<Address> addresses;
+    private List<AddressWithoutOwnerDTO> addresses;
     private List<Review> reviews;
 }
