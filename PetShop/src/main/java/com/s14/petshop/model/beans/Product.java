@@ -23,20 +23,18 @@ public class Product {
     private int quantity;
     @Column
     private String info;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "subcategory_id")
-//    private Subcategory subcategory;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "brand_id")
-//    private Brand brand;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "discount_id")
-//    private Discount discount;
 
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private Subcategory subcategory;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @ManyToOne
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
 
     //todo add relation between product images, fav products
-
 }
