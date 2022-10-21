@@ -3,16 +3,12 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.dtos.products.ProductAddDTO;
 import com.s14.petshop.model.dtos.products.ProductDTO;
-import com.s14.petshop.model.dtos.products.ProductNameDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ProductService extends AbstractService {
@@ -65,12 +61,11 @@ public class ProductService extends AbstractService {
         throw new BadRequestException("Product is already out of stock");
     }
 
-    public ProductDTO searchWithName(ProductNameDTO dto) {
-        if (dto.getName() == null || dto.getName().isEmpty()) {
+    public ProductDTO searchWithName(String dto) {
+        if (dto == null || dto.isEmpty()) {
             throw new BadRequestException("Enter name for searching");
         }
-
-        Product product = productRepository.findByName(dto.getName());
+        Product product = productRepository.findByName(dto);
         ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
         return dtoResult;
     }

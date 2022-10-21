@@ -2,12 +2,9 @@ package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.products.ProductAddDTO;
 import com.s14.petshop.model.dtos.products.ProductDTO;
-import com.s14.petshop.model.dtos.products.ProductNameDTO;
 import com.s14.petshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class ProductController extends AbstractController {
@@ -35,9 +32,9 @@ public class ProductController extends AbstractController {
         return productService.addProduct(dto);
     }
 
-    @GetMapping("/product/search")
-    public ProductDTO searchProductByName(@RequestBody ProductNameDTO dto) {
-        ProductDTO result = productService.searchWithName(dto);
+    @GetMapping("/product/search/{name}")
+    public ProductDTO searchProductByName(@PathVariable String name) {
+        ProductDTO result = productService.searchWithName(name);
         return result;
     }
 
