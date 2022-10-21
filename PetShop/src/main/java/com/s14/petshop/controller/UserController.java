@@ -1,9 +1,7 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.user.LoginDTO;
-import com.s14.petshop.model.dtos.user.RegisterDTO;
-import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
-import com.s14.petshop.model.exceptions.UnauthorizedException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.s14.petshop.model.dtos.user.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +11,9 @@ import javax.servlet.http.HttpSession;
 public class UserController extends AbstractController {
     @PostMapping("/user/auth")
     public UserWithoutPassAndIsAdminDTO login(@RequestBody LoginDTO loginDTO, HttpServletRequest req) {
+        loginDTO.setEmail(loginDTO.getEmail().trim());
+        loginDTO.setPassword(loginDTO.getPassword().trim());
+
         UserWithoutPassAndIsAdminDTO resultUser = userService.login(loginDTO);
         loginUser(req, resultUser.getId());
         return resultUser;
@@ -25,22 +26,41 @@ public class UserController extends AbstractController {
 
     @PostMapping("/users")
     public UserWithoutPassAndIsAdminDTO registerUser(@RequestBody RegisterDTO userForRegistration) {
+        userForRegistration.setEmail(userForRegistration.getEmail().trim());
+        userForRegistration.setPassword(userForRegistration.getPassword().trim());
+
+        userForRegistration.setConfirmPassword(userForRegistration.getConfirmPassword().trim());
         return userService.registerUser(userForRegistration);
     }
 
     @GetMapping("/user/profile")
     public UserWithoutPassAndIsAdminDTO showUserProfile(HttpServletRequest request) {
-        int id = getLoggedUserId(request);
-        if (id < 1) {
-            throw new UnauthorizedException("You have to login!");
-        } else {
-            return getUserById(id);
-        }
+        return getUserById(getLoggedUserId(request));
     }
 
     @PostMapping("/user/logout")
     public void logout(HttpSession session, HttpServletRequest request) {
         session.invalidate();
-//        System.out.println(isLogged(request));
+    }
+
+    @PutMapping("/user/profile")
+    public void editProfile(@RequestBody EditProfileUserDTO user, HttpServletRequest request) {
+        System.out.println(user.toString());
+        UserWithoutPassAndIsAdminDTO u = getUserById(getLoggedUserId(request));
+        userService.editProfile(user, u);
+    }
+
+    @PutMapping("/user/profile/changePassword")
+    public void changePassword(@RequestBody ChangePasswordDTO user, HttpServletRequest request) {
+        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        System.out.println(user.toString());
+        System.out.println(currentUser.toString());
+        userService.changePassword(user, currentUser);
+    }
+
+    @PutMapping("/user/profile/newsletter") // TODO
+    public void subscribe(@JsonProperty("subscribe") boolean subscribe, HttpServletRequest request) {
+        UserWithoutPassAndIsAdminDTO user = getUserById(getLoggedUserId(request));
+        userService.subscribe(subscribe, user);
     }
 }
