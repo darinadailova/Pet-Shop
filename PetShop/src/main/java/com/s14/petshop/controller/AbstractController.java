@@ -4,6 +4,8 @@ import com.s14.petshop.model.dtos.ErrorDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.exceptions.UnauthorizedException;
+import com.s14.petshop.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +19,9 @@ public abstract class AbstractController {
     public static final String LOGGED = "LOGGED";
     public static final String USER_ID = "USER_ID";
     public static final String REMOTE_IP = "REMOTE_IP";
+
+    @Autowired
+    public UserService userService;
 
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -58,17 +63,12 @@ public abstract class AbstractController {
         session.setAttribute(REMOTE_IP, request.getRemoteAddr());
     }
 
-    public int getUserId(HttpServletRequest request) {
+    public int getLoggedUserId(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String IP = request.getRemoteAddr();
 
-        boolean isLoggedOut = session.getAttribute(LOGGED) == null;
-        boolean sessionExpired = (boolean) session.getAttribute(LOGGED);
-        boolean isLoggedFromTheSameIP = false;
-        if (session.getAttribute(REMOTE_IP) != null) {
-            isLoggedFromTheSameIP = session.getAttribute(REMOTE_IP).equals(IP);
-        }
-        if(session.isNew() || isLoggedOut || !isLoggedFromTheSameIP || sessionExpired){
+        if(session.isNew() || session.getAttribute(LOGGED) == null
+            || !(boolean) session.getAttribute(LOGGED) || !session.getAttribute(REMOTE_IP).equals(IP)){
             throw new UnauthorizedException("You have to login!");
         }
         return (int) session.getAttribute(USER_ID);
