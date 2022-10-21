@@ -1,4 +1,4 @@
-package com.s14.petshop.model.dtos.products;
+package com.s14.petshop.model.dtos.product;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.s14.petshop.model.dtos.products;
+package com.s14.petshop.model.dtos.product;
 
 import com.s14.petshop.model.beans.Brand;
 import com.s14.petshop.model.beans.Discount;

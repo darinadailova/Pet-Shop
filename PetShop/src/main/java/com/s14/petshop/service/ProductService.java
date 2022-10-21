@@ -1,8 +1,8 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Product;
-import com.s14.petshop.model.dtos.products.ProductAddDTO;
-import com.s14.petshop.model.dtos.products.ProductDTO;
+import com.s14.petshop.model.dtos.product.ProductAddDTO;
+import com.s14.petshop.model.dtos.product.ProductDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.ProductRepository;

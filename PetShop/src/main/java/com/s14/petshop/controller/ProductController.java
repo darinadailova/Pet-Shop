@@ -1,7 +1,7 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.products.ProductAddDTO;
-import com.s14.petshop.model.dtos.products.ProductDTO;
+import com.s14.petshop.model.dtos.product.ProductAddDTO;
+import com.s14.petshop.model.dtos.product.ProductDTO;
 import com.s14.petshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
