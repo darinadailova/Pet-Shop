@@ -3,12 +3,10 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
-import com.s14.petshop.model.dtos.user.EditProfileUserDTO;
-import com.s14.petshop.model.dtos.user.LoginDTO;
-import com.s14.petshop.model.dtos.user.RegisterDTO;
-import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
+import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -99,5 +97,43 @@ public class UserService extends AbstractService {
         userForSavingInDb.setPassword(bCryptPasswordEncoder.encode(userForSavingInDb.getPassword()));
         userRepository.save(userForSavingInDb);
         return modelMapper.map(userForRegistration, UserWithoutPassAndIsAdminDTO.class);
+    }
+
+    public void subscribe(boolean subscribe, UserWithoutPassAndIsAdminDTO user) {
+        User u = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new NotFoundException("user not found"));
+        u.setSubscribed(subscribe);
+        System.out.println(u.isSubscribed());
+        userRepository.save(u);
+    }
+
+    public void editProfile(EditProfileUserDTO user, UserWithoutPassAndIsAdminDTO u) {
+        User user2 = userRepository.findByEmail(u.getEmail())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user2.setFirstName(user.getFirstName());
+        user2.setLastName(user.getLastName());
+        user2.setEmail(user.getEmail());
+        user2.setPhoneNumber(user.getPhoneNumber());
+        user2.setGender(user.getGender());
+
+        if (!user.getRepeatPassword().equals(user.getPassword())) {
+            throw new BadRequestException("Passwords don't match!");
+        }
+        userRepository.save(user2);
+    }
+
+    public void changePassword(ChangePasswordDTO user, UserWithoutPassAndIsAdminDTO currentUser) {
+        User u = userRepository.findByEmail(currentUser.getEmail())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        System.out.println(u.toString());
+        if (!bCryptPasswordEncoder.matches(user.getPassword(), u.getPassword())) {
+            throw new BadRequestException("Bad request");
+        }
+        if (!user.getNewPassword().equals(user.getRepeatNewPassword())) {
+            throw  new BadRequestException("Passwords don't match");
+        }
+        u.setPassword(bCryptPasswordEncoder.encode(user.getNewPassword()));
+        userRepository.save(u);
     }
 }

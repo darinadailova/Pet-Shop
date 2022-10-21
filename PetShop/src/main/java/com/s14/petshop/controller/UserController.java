@@ -1,10 +1,7 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.user.EditProfileUserDTO;
-import com.s14.petshop.model.dtos.user.LoginDTO;
-import com.s14.petshop.model.dtos.user.RegisterDTO;
-import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
-import com.s14.petshop.model.exceptions.UnauthorizedException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.s14.petshop.model.dtos.user.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +44,23 @@ public class UserController extends AbstractController {
     }
 
     @PutMapping("/user/profile")
-    public void editProfile(EditProfileUserDTO user, HttpServletRequest request) {
+    public void editProfile(@RequestBody EditProfileUserDTO user, HttpServletRequest request) {
+        System.out.println(user.toString());
+        UserWithoutPassAndIsAdminDTO u = getUserById(getLoggedUserId(request));
+        userService.editProfile(user, u);
+    }
 
+    @PutMapping("/user/profile/changePassword")
+    public void changePassword(@RequestBody ChangePasswordDTO user, HttpServletRequest request) {
+        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        System.out.println(user.toString());
+        System.out.println(currentUser.toString());
+        userService.changePassword(user, currentUser);
+    }
+
+    @PutMapping("/user/profile/newsletter") // TODO
+    public void subscribe(@JsonProperty("subscribe") boolean subscribe, HttpServletRequest request) {
+        UserWithoutPassAndIsAdminDTO user = getUserById(getLoggedUserId(request));
+        userService.subscribe(subscribe, user);
     }
 }

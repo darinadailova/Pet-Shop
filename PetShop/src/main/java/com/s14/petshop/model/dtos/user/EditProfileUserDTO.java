@@ -1,10 +1,7 @@
 package com.s14.petshop.model.dtos.user;
+import lombok.Data;
 
-import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
-import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
-
-import java.util.List;
-
+@Data
 public class EditProfileUserDTO {
 
     private String firstName;
