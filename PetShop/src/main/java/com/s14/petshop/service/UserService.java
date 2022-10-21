@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
+import com.s14.petshop.model.dtos.user.EditProfileUserDTO;
 import com.s14.petshop.model.dtos.user.LoginDTO;
 import com.s14.petshop.model.dtos.user.RegisterDTO;
 import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
@@ -77,12 +78,8 @@ public class UserService extends AbstractService {
     }
 
     public UserWithoutPassAndIsAdminDTO getById(int uid) {
-        Optional<User> result = userRepository.getById(uid);
-        if (result.isPresent()) {
-            return modelMapper.map(result, UserWithoutPassAndIsAdminDTO.class);
-        } else {
-            throw new NotFoundException("User not found!");
-        }
+        User result = userRepository.getById(uid).orElseThrow(() -> new NotFoundException("User not found"));
+        return modelMapper.map(result, UserWithoutPassAndIsAdminDTO.class);
     }
 
     public UserWithoutPassAndIsAdminDTO registerUser(RegisterDTO userForRegistration) {

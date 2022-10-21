@@ -1,5 +1,6 @@
 package com.s14.petshop.controller;
 
+import com.s14.petshop.model.dtos.user.EditProfileUserDTO;
 import com.s14.petshop.model.dtos.user.LoginDTO;
 import com.s14.petshop.model.dtos.user.RegisterDTO;
 import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpSession;
 public class UserController extends AbstractController {
     @PostMapping("/user/auth")
     public UserWithoutPassAndIsAdminDTO login(@RequestBody LoginDTO loginDTO, HttpServletRequest req) {
+        loginDTO.setEmail(loginDTO.getEmail().trim());
+        loginDTO.setPassword(loginDTO.getPassword().trim());
+
         UserWithoutPassAndIsAdminDTO resultUser = userService.login(loginDTO);
         loginUser(req, resultUser.getId());
         return resultUser;
@@ -25,22 +29,25 @@ public class UserController extends AbstractController {
 
     @PostMapping("/users")
     public UserWithoutPassAndIsAdminDTO registerUser(@RequestBody RegisterDTO userForRegistration) {
+        userForRegistration.setEmail(userForRegistration.getEmail().trim());
+        userForRegistration.setPassword(userForRegistration.getPassword().trim());
+
+        userForRegistration.setConfirmPassword(userForRegistration.getConfirmPassword().trim());
         return userService.registerUser(userForRegistration);
     }
 
     @GetMapping("/user/profile")
     public UserWithoutPassAndIsAdminDTO showUserProfile(HttpServletRequest request) {
-        int id = getLoggedUserId(request);
-        if (id < 1) {
-            throw new UnauthorizedException("You have to login!");
-        } else {
-            return getUserById(id);
-        }
+        return getUserById(getLoggedUserId(request));
     }
 
     @PostMapping("/user/logout")
     public void logout(HttpSession session, HttpServletRequest request) {
         session.invalidate();
-//        System.out.println(isLogged(request));
+    }
+
+    @PutMapping("/user/profile")
+    public void editProfile(EditProfileUserDTO user, HttpServletRequest request) {
+
     }
 }
