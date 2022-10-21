@@ -1,5 +1,6 @@
 package com.s14.petshop.controller;
 
+import com.s14.petshop.model.dtos.products.ProductAddDTO;
 import com.s14.petshop.model.dtos.products.ProductDTO;
 import com.s14.petshop.model.dtos.products.ProductNameDTO;
 import com.s14.petshop.service.ProductService;
@@ -28,7 +29,7 @@ public class ProductController extends AbstractController {
     }
 
     @PostMapping("/products")
-    public ProductDTO addProduct(@RequestBody ProductDTO dto) {
+    public ProductDTO addProduct(@RequestBody ProductAddDTO dto) {
         //todo validate login
         //todo validate admin
         return productService.addProduct(dto);

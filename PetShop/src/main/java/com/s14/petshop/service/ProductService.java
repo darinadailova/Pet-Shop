@@ -1,6 +1,7 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Product;
+import com.s14.petshop.model.dtos.products.ProductAddDTO;
 import com.s14.petshop.model.dtos.products.ProductDTO;
 import com.s14.petshop.model.dtos.products.ProductNameDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -23,6 +24,10 @@ public class ProductService extends AbstractService {
     private ModelMapper modelMapper;
     @Autowired
     private DiscountService discountService;
+    @Autowired
+    private BrandService brandService;
+    @Autowired
+    private SubcategoryService subcategoryService;
 
     public ProductDTO getById(int pid) {
         Product product = productRepository.findById(pid).orElseThrow(() -> new NotFoundException("Product not found!"));
@@ -30,30 +35,38 @@ public class ProductService extends AbstractService {
         return dto;
     }
 
-    public ProductDTO addProduct(ProductDTO dto) {
-        if (productRepository.existsByName(dto.getName())) {
-            Product product = productRepository.findByName(dto.getName());
+    public ProductDTO addProduct(ProductAddDTO dto) {
+        Product product = productRepository.findByName(dto.getName());
+        if (product != null) {
             product.setQuantity(product.getQuantity() + 1);
+            productRepository.save(product);
+            ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
+            return dtoResult;
         }
-        Product product = modelMapper.map(dto, Product.class);
+        product = modelMapper.map(dto, Product.class);
+        product.setBrand(brandService.getById(dto.getBrand_id()));
+        product.setDiscount(discountService.getById(dto.getDiscount_id()));
+        product.setSubcategory(subcategoryService.getById(dto.getSubcategory_id()));
         product.setQuantity(1);
-
         productRepository.save(product);
-        return dto;
+
+        ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
+        return dtoResult;
     }
 
     public boolean deleteProduct(int pid) {
-        if(!productRepository.existsById(pid)){
-            throw new BadRequestException("This product does not exist!");
+        Product product = productRepository.findById(pid)
+                .orElseThrow(() -> new NotFoundException("Product does not exist!"));
+        if (product.getQuantity() > 0) {
+            product.setQuantity(product.getQuantity() - 1);
+            productRepository.save(product);
+            return true;
         }
-        Product product = productRepository.findById(pid).get();
-        product.setQuantity(product.getQuantity() - 1);
-        productRepository.save(product);
-        return true;
+        throw new BadRequestException("Product is already out of stock");
     }
 
     public ProductDTO searchWithName(ProductNameDTO dto) {
-        if(dto.getName() == null || dto.getName().isEmpty()){
+        if (dto.getName() == null || dto.getName().isEmpty()) {
             throw new BadRequestException("Enter name for searching");
         }
 
@@ -63,11 +76,8 @@ public class ProductService extends AbstractService {
     }
 
     public ProductDTO addDiscountToProduct(int pid, int did) {
-        if(!productRepository.existsById(pid)){
-            throw new BadRequestException("The product does not exist");
-        }
-
-        Product product = productRepository.findById(pid).get();
+        Product product = productRepository.findById(pid).
+                orElseThrow(() -> new NotFoundException("The product does not exist"));
 
         product.setDiscount(discountService.getById(did));
         productRepository.save(product);
