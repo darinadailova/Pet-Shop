@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 public class AddressController extends AbstractController{
@@ -16,7 +17,7 @@ public class AddressController extends AbstractController{
     UserController userController;
 
     @PostMapping("/user/profile/add-address")
-    public void addAddress(@RequestBody AddingAddress address, HttpServletRequest request) {
+    public void addAddress(@Valid @RequestBody AddingAddress address, HttpServletRequest request) {
         UserWithoutPassAndIsAdminDTO currentUser = userController.getUserById(getLoggedUserId(request));
         addressService.addAddress(address, currentUser);
     }

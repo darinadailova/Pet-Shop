@@ -2,11 +2,17 @@ package com.s14.petshop.model.dtos.user;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class ChangePasswordDTO {
 
+    @NotBlank(message = "Password is required")
     private String password;
-    private String newPassword;
-    private String repeatNewPassword;
 
+    @NotBlank(message = "New password is required")
+    private String newPassword;
+
+    @NotBlank(message = "Repeat password is required")
+    private String repeatNewPassword;
 }
