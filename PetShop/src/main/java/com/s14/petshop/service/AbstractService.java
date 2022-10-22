@@ -9,7 +9,6 @@ public abstract class AbstractService {
 
     @Autowired
     protected UserRepository userRepository;
-
     @Autowired
     protected AddressRepository addressRepository;
     @Autowired

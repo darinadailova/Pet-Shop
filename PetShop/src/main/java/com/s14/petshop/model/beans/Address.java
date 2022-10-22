@@ -1,11 +1,9 @@
 package com.s14.petshop.model.beans;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "addresses")
 @Setter
@@ -31,4 +29,22 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+
+    public boolean equals(Address obj) {
+        if (! (this.owner.getId() == obj.owner.getId() && this.city.equals(obj.getCity()) &&
+                this.postcode.equals(obj.getPostcode()) && this.streetAddress.equals(obj.getStreetAddress()))) {
+            return false;
+        }
+        if (obj.getApartmentBuilding() != null) {
+            if (!this.apartmentBuilding.equals(obj.getApartmentBuilding())) {
+                return false;
+            }
+        }
+        if (obj.getApartmentNumber() != null) {
+            if (!this.apartmentNumber.equals(obj.getApartmentNumber())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
