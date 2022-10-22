@@ -14,15 +14,8 @@ public class AddressService extends AbstractService{
         User user = userRepository.findByEmail(currentUser.getEmail())
                 .orElseThrow(() -> new NotFoundException("user not found!"));
 
-        Address addressFroSavingInDb = new Address();
-        addressFroSavingInDb.setCity(address.getCity());
-        addressFroSavingInDb.setStreetAddress(address.getStreetAddress());
-        addressFroSavingInDb.setApartmentBuilding(address.getApartmentBuilding());
-        addressFroSavingInDb.setPostcode(address.getPostcode());
-        addressFroSavingInDb.setApartmentNumber(address.getApartmentNumber());
+        Address addressFroSavingInDb = modelMapper.map(address, Address.class);
         addressFroSavingInDb.setOwner(user);
-
-        currentUser.getAddresses().add(modelMapper.map(address, AddressWithoutOwnerDTO.class));
         addressRepository.save(addressFroSavingInDb);
     }
 }

@@ -26,9 +26,6 @@ public abstract class AbstractController {
     @Autowired
     public AddressService addressService;
 
-    @Autowired
-    public UserController userController;
-
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorDTO handleBadRequest(Exception e) {
