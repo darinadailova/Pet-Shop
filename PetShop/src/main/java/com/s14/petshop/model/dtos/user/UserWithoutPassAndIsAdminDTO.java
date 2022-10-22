@@ -1,8 +1,6 @@
 package com.s14.petshop.model.dtos.user;
 
-import com.s14.petshop.model.beans.Address;
-import com.s14.petshop.model.beans.Review;
-import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
+import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
 import lombok.Data;
 

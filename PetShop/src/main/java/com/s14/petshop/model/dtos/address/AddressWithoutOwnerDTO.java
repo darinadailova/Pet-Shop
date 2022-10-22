@@ -1,9 +1,6 @@
-package com.s14.petshop.model.dtos;
+package com.s14.petshop.model.dtos.address;
 
-import com.s14.petshop.model.beans.User;
 import lombok.Data;
-
-import javax.persistence.*;
 
 @Data
 public class AddressWithoutOwnerDTO {

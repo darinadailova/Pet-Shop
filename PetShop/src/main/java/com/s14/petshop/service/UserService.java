@@ -1,12 +1,12 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.User;
-import com.s14.petshop.model.dtos.AddressWithoutOwnerDTO;
+import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
-import org.aspectj.weaver.ast.Not;
+import com.s14.petshop.model.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -103,7 +103,6 @@ public class UserService extends AbstractService {
         User u = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new NotFoundException("user not found"));
         u.setSubscribed(subscribe);
-        System.out.println(u.isSubscribed());
         userRepository.save(u);
     }
 
@@ -135,5 +134,19 @@ public class UserService extends AbstractService {
         }
         u.setPassword(bCryptPasswordEncoder.encode(user.getNewPassword()));
         userRepository.save(u);
+    }
+
+    public void deleteUser(DeleteUserDTO userForDeleting, UserWithoutPassAndIsAdminDTO currentUser) {
+        if (!userForDeleting.getPassword().equals(userForDeleting.getConfirm_password())) {
+            throw new UnauthorizedException("Passwords don't match");
+        }
+        User user = userRepository.findByEmail(currentUser.getEmail())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.setFirstName("deleted");
+        user.setLastName("deleted");
+        user.setPassword("deleted");
+        user.setEmail("deleted" + user.getId());
+        user.setPhoneNumber("deleted" + user.getId());
+        userRepository.save(user);
     }
 }

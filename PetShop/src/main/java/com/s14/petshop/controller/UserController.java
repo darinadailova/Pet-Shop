@@ -39,7 +39,7 @@ public class UserController extends AbstractController {
     }
 
     @PostMapping("/user/logout")
-    public void logout(HttpSession session, HttpServletRequest request) {
+    public void logout(HttpSession session) {
         session.invalidate();
     }
 
@@ -58,9 +58,18 @@ public class UserController extends AbstractController {
         userService.changePassword(user, currentUser);
     }
 
-    @PutMapping("/user/profile/newsletter") // TODO
-    public void subscribe(@JsonProperty("subscribe") boolean subscribe, HttpServletRequest request) {
+    @PutMapping("/user/profile/newsletter")
+    public void subscribe(@RequestParam(name = "is_subscribed") boolean subscribe, HttpServletRequest request) {
         UserWithoutPassAndIsAdminDTO user = getUserById(getLoggedUserId(request));
         userService.subscribe(subscribe, user);
     }
+
+    @DeleteMapping("/user/profile")
+    public void deleteUser(@RequestBody DeleteUserDTO userForDeleting, HttpServletRequest request) {
+        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        userService.deleteUser(userForDeleting, currentUser);
+        logout(request.getSession());
+    }
+
+
 }
