@@ -18,6 +18,8 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class AbstractController {
 
@@ -96,5 +98,11 @@ public abstract class AbstractController {
                 || !(boolean) session.getAttribute(LOGGED) || !session.getAttribute(REMOTE_IP).equals(IP)){
             throw new UnauthorizedException("You have to login!");
         }
+    }
+
+    public static boolean isUserAdmin(String email) {
+        Pattern pattern = Pattern.compile("[a-z,A-Z,0-9]+@petshop.bg$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
     }
 }

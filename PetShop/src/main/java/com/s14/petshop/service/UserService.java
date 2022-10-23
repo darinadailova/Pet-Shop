@@ -1,5 +1,6 @@
 package com.s14.petshop.service;
 
+import com.s14.petshop.controller.AbstractController;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
@@ -95,6 +96,9 @@ public class UserService extends AbstractService {
 
         User userForSavingInDb = modelMapper.map(userForRegistration, User.class);
         userForSavingInDb.setPassword(bCryptPasswordEncoder.encode(userForSavingInDb.getPassword()));
+        if (AbstractController.isUserAdmin(userForSavingInDb.getEmail())) {
+            userForSavingInDb.setAdmin(true);
+        }
         userRepository.save(userForSavingInDb);
         return modelMapper.map(userForRegistration, UserWithoutPassAndIsAdminDTO.class);
     }

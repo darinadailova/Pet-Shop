@@ -1,6 +1,5 @@
 package com.s14.petshop.model.beans;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

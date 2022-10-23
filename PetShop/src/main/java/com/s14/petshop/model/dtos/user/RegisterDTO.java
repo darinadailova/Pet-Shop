@@ -1,15 +1,8 @@
 package com.s14.petshop.model.dtos.user;
 
-import com.s14.petshop.model.beans.Address;
-import com.s14.petshop.model.beans.Review;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @Data
 public class RegisterDTO {
@@ -35,6 +28,5 @@ public class RegisterDTO {
     @NotBlank(message = "Gender is required")
     private String gender;
 
-    @NotBlank(message = "Do you want to subscribe to the newsletter is required")
     private boolean isSubscribed;
 }

@@ -1,6 +1,5 @@
 package com.s14.petshop.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.s14.petshop.model.dtos.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
