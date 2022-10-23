@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 public class ProductService extends AbstractService {
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private DiscountService discountService;
