@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "users")
 @Setter
@@ -41,4 +42,10 @@ public class User {
     private List<Review> reviews;
 
     // todo add many to many relationship for favorite products
+    @ManyToMany
+    @JoinTable(
+            name = "users_have_favorite_products",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    Set<Product> likedProducts;
 }

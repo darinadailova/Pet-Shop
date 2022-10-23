@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "products")
 @Setter
@@ -37,4 +38,7 @@ public class Product {
     private Discount discount;
 
     //todo add relation between product images, fav products
+
+    @ManyToMany(mappedBy = "likedProducts")
+    Set<User> likedBy;
 }

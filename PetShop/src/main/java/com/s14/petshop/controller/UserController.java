@@ -1,6 +1,7 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.user.*;
+import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,5 +72,14 @@ public class UserController extends AbstractController {
         UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
         userService.deleteUser(userForDeleting, currentUser);
         logout(request.getSession());
+    }
+
+    @GetMapping("/products/{pid}/fav")
+    public void addProductToFavorites(@PathVariable int pid, HttpServletRequest request) {
+        if (pid < 1) {
+            throw new NotFoundException("Product not found");
+        }
+        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        userService.addProductToFavorites(pid, currentUser);
     }
 }
