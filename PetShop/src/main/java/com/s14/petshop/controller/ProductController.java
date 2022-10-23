@@ -2,6 +2,7 @@ package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
 import com.s14.petshop.model.dtos.product.ProductDTO;
+import com.s14.petshop.model.dtos.product.ProductEditDTO;
 import com.s14.petshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,11 @@ public class ProductController extends AbstractController {
         return productDTO;
     }
 
-//    @PostMapping("/products/{pid}")
-//    public ProductDTO editProduct();
+    @PutMapping("/products/{pid}")
+    public ProductDTO editProduct(@RequestBody ProductEditDTO dto, @PathVariable int pid){
+        // todo validate login and admin
+
+        return productService.editProduct(dto,pid);
+    }
 
 }

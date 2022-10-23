@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
 import com.s14.petshop.model.dtos.product.ProductDTO;
+import com.s14.petshop.model.dtos.product.ProductEditDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -89,4 +90,17 @@ public class ProductService extends AbstractService {
     }
 
 
+    public ProductDTO editProduct(ProductEditDTO dto, int pid) {
+        Product product = productRepository.findById(pid)
+                .orElseThrow(() -> new NotFoundException("Product does not exist"));
+
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setInfo(dto.getInfo());
+
+        productRepository.save(product);
+
+        ProductDTO result = modelMapper.map(product,ProductDTO.class);
+        return result;
+    }
 }
