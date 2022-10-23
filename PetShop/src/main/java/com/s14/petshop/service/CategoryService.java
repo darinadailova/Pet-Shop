@@ -1,18 +1,13 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Category;
-import com.s14.petshop.model.beans.Subcategory;
 import com.s14.petshop.model.dtos.category.CategoryDTO;
-import com.s14.petshop.model.dtos.subcategory.SubcategoryDTO;
-import com.s14.petshop.model.dtos.subcategory.SubcategoryWithoutCategoryDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.CategoryRepository;
-import com.s14.petshop.model.repositories.SubcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +15,6 @@ import java.util.List;
 public class CategoryService extends AbstractService {
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @Autowired
-    private SubcategoryRepository subcategoryRepository;
 
     public CategoryDTO getById(int cid) {
         Category category = categoryRepository.findById(cid)
@@ -54,19 +46,16 @@ public class CategoryService extends AbstractService {
         return result;
     }
 
-    @Transactional
-    public int deleteCategory(int cid) {
+    public boolean deleteCategory(int cid) {
         if(!categoryRepository.existsById(cid)){
             throw new NotFoundException("Category cannot be deleted!");
         }
         categoryRepository.deleteById(cid);
-        return 1;
+        return true;
     }
 
     public Category getAllCategoryById(int cid) {
         return categoryRepository.findById(cid)
                 .orElseThrow(() -> new NotFoundException("Category does not exist!"));
     }
-
-
 }

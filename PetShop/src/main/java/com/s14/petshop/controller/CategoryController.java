@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 public class CategoryController extends AbstractController {
     @Autowired
@@ -32,7 +31,7 @@ public class CategoryController extends AbstractController {
     }
 
     @DeleteMapping("categories/{cid}")
-    public int deleteCategory(@PathVariable int cid){
+    public boolean deleteCategory(@PathVariable int cid){
         //todo login admin
         return categoryService.deleteCategory(cid);
     }

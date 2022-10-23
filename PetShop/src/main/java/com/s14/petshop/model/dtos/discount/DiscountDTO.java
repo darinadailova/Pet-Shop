@@ -1,29 +1,19 @@
-package com.s14.petshop.model.beans;
+package com.s14.petshop.model.dtos.discount;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "discounts")
 @Setter
 @Getter
 @NoArgsConstructor
+public class DiscountDTO {
 
-public class Discount {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
     private String name;
-    @Column
     private int percentDiscount;
-    @Column
     private LocalDateTime startAt;
-    @Column
     private LocalDateTime endAt;
 }
