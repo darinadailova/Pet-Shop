@@ -34,16 +34,21 @@ public class ProductController extends AbstractController {
 
     @GetMapping("/product/search/{name}")
     public ProductDTO searchProductByName(@PathVariable String name) {
+        //todo login
+
         ProductDTO result = productService.searchWithName(name);
         return result;
     }
 
-    @PostMapping("/product/{pid}/discount/{did}")
+    @PostMapping("/products/{pid}/discount/{did}")
     public ProductDTO addDiscountToProduct(@PathVariable int pid, @PathVariable int did) {
         //todo validate login and admin
 
         ProductDTO productDTO = productService.addDiscountToProduct(pid,did);
         return productDTO;
     }
+
+//    @PostMapping("/products/{pid}")
+//    public ProductDTO editProduct();
 
 }

@@ -17,8 +17,7 @@ public class DiscountService extends AbstractService {
     private DiscountRepository discountRepository;
 
     public DiscountDTO getById(int did) {
-        Discount discount = discountRepository.findById(did)
-                .orElseThrow(() -> new NotFoundException("Discount does not exist!"));
+        Discount discount = getAllDiscountById(did);
         DiscountDTO dto = modelMapper.map(discount, DiscountDTO.class);
         return dto;
     }
@@ -44,5 +43,10 @@ public class DiscountService extends AbstractService {
         discount.setEndAt(dto.getEndAt());
         discountRepository.save(discount);
         return true;
+    }
+
+    public Discount getAllDiscountById(int did) {
+        return discountRepository.findById(did)
+                .orElseThrow(() -> new NotFoundException("Discount does not exist!"));
     }
 }

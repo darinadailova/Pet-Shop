@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class ProductAddDTO {
-    private int id;
     private String name;
     private double price;
     private String info;
