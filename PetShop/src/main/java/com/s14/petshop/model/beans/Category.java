@@ -21,5 +21,5 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    List<Subcategory> subcategoryList;
+    List<Subcategory> subcategories;
 }

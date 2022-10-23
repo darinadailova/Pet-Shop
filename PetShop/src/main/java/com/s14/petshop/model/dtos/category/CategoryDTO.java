@@ -1,6 +1,7 @@
 package com.s14.petshop.model.dtos.category;
 
 import com.s14.petshop.model.beans.Subcategory;
+import com.s14.petshop.model.dtos.subcategory.SubcategoryWithoutCategoryDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,5 @@ import java.util.List;
 public class CategoryDTO {
     private int id;
     private String name;
-    private List<Subcategory> subcategories;
-    //todo list of subcategories without categories
+    private List<SubcategoryWithoutCategoryDTO> subcategories;
 }

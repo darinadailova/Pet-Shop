@@ -20,7 +20,7 @@ public class CategoryController extends AbstractController {
     }
 
     @PostMapping("/categories")
-    public boolean addCategory(@RequestParam String name){
+    public CategoryDTO addCategory(@RequestParam String name){
         //todo login admin
         return categoryService.addCategory(name);
     }
@@ -32,7 +32,7 @@ public class CategoryController extends AbstractController {
     }
 
     @DeleteMapping("categories/{cid}")
-    public boolean deleteCategory(@PathVariable int cid){
+    public int deleteCategory(@PathVariable int cid){
         //todo login admin
         return categoryService.deleteCategory(cid);
     }

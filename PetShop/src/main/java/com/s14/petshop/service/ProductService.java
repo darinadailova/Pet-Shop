@@ -42,7 +42,7 @@ public class ProductService extends AbstractService {
         product = modelMapper.map(dto, Product.class);
         product.setBrand(brandService.getById(dto.getBrand_id()));
         product.setDiscount(discountService.getById(dto.getDiscount_id()));
-        product.setSubcategory(subcategoryService.getById(dto.getSubcategory_id()));
+        product.setSubcategory(subcategoryService.getAllSubById(dto.getSubcategory_id()));
         product.setQuantity(1);
         productRepository.save(product);
 
