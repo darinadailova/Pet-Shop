@@ -16,6 +16,7 @@ public class UserWithoutPassAndIsAdminDTO {
     private String phoneNumber;
     private String gender;
     private boolean isSubscribed;
+    private String profilePictureUrl;
     private List<AddressWithoutOwnerDTO> addresses;
     private List<ReviewWithoutOwnerDTO> reviews;
 }

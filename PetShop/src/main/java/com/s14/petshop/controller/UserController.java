@@ -5,6 +5,7 @@ import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -81,5 +82,11 @@ public class UserController extends AbstractController {
         }
         UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
         userService.addProductToFavorites(pid, currentUser);
+    }
+
+    @PostMapping("/user/profile/upload-picture")
+    public String uploadProfileImage(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
+        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        return userService.uploadProfileImage(file, currentUser);
     }
 }

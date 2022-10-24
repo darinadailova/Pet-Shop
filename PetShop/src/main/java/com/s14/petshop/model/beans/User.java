@@ -34,6 +34,8 @@ public class User {
     private boolean isAdmin;
     @Column
     private boolean isSubscribed;
+    @Column
+    private String profilePictureUrl;
 
     @OneToMany(mappedBy = "owner")
     private List<Address> addresses;

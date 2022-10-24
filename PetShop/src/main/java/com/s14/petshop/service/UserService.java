@@ -9,10 +9,15 @@ import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.exceptions.UnauthorizedException;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -161,5 +166,42 @@ public class UserService extends AbstractService {
         User user = modelMapper.map(currentUser, User.class);
         user.getLikedProducts().add(product);
         userRepository.save(user);
+    }
+
+    public String uploadProfileImage(MultipartFile file, UserWithoutPassAndIsAdminDTO currentUser) {
+        try {
+            User user = userRepository.getById(currentUser.getId())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+
+            String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+            if (!checkImageExtension(extension)) {
+                throw new BadRequestException("Insert a picture");
+            }
+            String name = "uploads" + File.separator + System.nanoTime() + "-" + user.getId() + "." + extension;
+            File file2 = new File(name);
+            if(!file2.exists()) {
+                Files.copy(file.getInputStream(), file2.toPath());
+            }
+            else{
+                throw new BadRequestException("The file already exists.");
+            }
+            if(user.getProfilePictureUrl() != null){
+                File old = new File(user.getProfilePictureUrl());
+                old.delete();
+            }
+            user.setProfilePictureUrl(name);
+            userRepository.save(user);
+            return name;
+        } catch (IOException e) {
+            throw new BadRequestException(e.getMessage(), e);
+        }
+    }
+
+    private boolean checkImageExtension(String extension) {
+        extension = extension.toLowerCase();
+        return (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")
+                || extension.equals("gif") || extension.equals("raw") || extension.equals("svg") ||
+                extension.equals("heic"));
+
     }
 }
