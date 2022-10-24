@@ -1,7 +1,7 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.address.AddingAddress;
-import com.s14.petshop.model.dtos.user.UserWithoutPassAndIsAdminDTO;
+import com.s14.petshop.model.dtos.user.UserWithoutPasswordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +18,7 @@ public class AddressController extends AbstractController{
 
     @PostMapping("/user/profile/add-address")
     public void addAddress(@Valid @RequestBody AddingAddress address, HttpServletRequest request) {
-        UserWithoutPassAndIsAdminDTO currentUser = userController.getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO currentUser = userController.getUserById(getLoggedUserId(request));
         addressService.addAddress(address, currentUser);
     }
 }

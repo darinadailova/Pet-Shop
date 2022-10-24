@@ -14,22 +14,22 @@ import javax.validation.Valid;
 @RestController
 public class UserController extends AbstractController {
     @PostMapping("/user/auth")
-    public ResponseEntity<UserWithoutPassAndIsAdminDTO> login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest req) {
+    public ResponseEntity<UserWithoutPasswordDTO> login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest req) {
         loginDTO.setEmail(loginDTO.getEmail().trim());
         loginDTO.setPassword(loginDTO.getPassword().trim());
 
-        UserWithoutPassAndIsAdminDTO resultUser = userService.login(loginDTO);
+        UserWithoutPasswordDTO resultUser = userService.login(loginDTO);
         loginUser(req, resultUser.getId());
         return new ResponseEntity<>(resultUser, HttpStatus.OK);
     }
 
     @GetMapping("/users/{uid}")
-    public UserWithoutPassAndIsAdminDTO getUserById(@PathVariable int uid) {
+    public UserWithoutPasswordDTO getUserById(@PathVariable int uid) {
         return userService.getById(uid);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserWithoutPassAndIsAdminDTO> registerUser(@Valid @RequestBody RegisterDTO userForRegistration) {
+    public ResponseEntity<UserWithoutPasswordDTO> registerUser(@Valid @RequestBody RegisterDTO userForRegistration) {
         userForRegistration.setEmail(userForRegistration.getEmail().trim());
         userForRegistration.setPassword(userForRegistration.getPassword().trim());
 
@@ -38,7 +38,7 @@ public class UserController extends AbstractController {
     }
 
     @GetMapping("/user/profile")
-    public UserWithoutPassAndIsAdminDTO showUserProfile(HttpServletRequest request) {
+    public UserWithoutPasswordDTO showUserProfile(HttpServletRequest request) {
         return getUserById(getLoggedUserId(request));
     }
 
@@ -48,45 +48,42 @@ public class UserController extends AbstractController {
     }
 
     @PutMapping("/user/profile")
-    public void editProfile(@Valid @RequestBody EditProfileUserDTO user, HttpServletRequest request) {
-        System.out.println(user.toString());
-        UserWithoutPassAndIsAdminDTO u = getUserById(getLoggedUserId(request));
-        userService.editProfile(user, u);
+    public ResponseEntity<UserWithoutPasswordDTO> editProfile(@Valid @RequestBody EditProfileUserDTO user, HttpServletRequest request) {
+        UserWithoutPasswordDTO u = getUserById(getLoggedUserId(request));
+        return new ResponseEntity<>(userService.editProfile(user, u), HttpStatus.OK);
     }
 
     @PutMapping("/user/profile/changePassword")
-    public void changePassword(@Valid @RequestBody ChangePasswordDTO user, HttpServletRequest request) {
-        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
-        System.out.println(user.toString());
-        System.out.println(currentUser.toString());
-        userService.changePassword(user, currentUser);
+    public ResponseEntity<UserWithoutPasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO user, HttpServletRequest request) {
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
+        return new ResponseEntity<>(userService.changePassword(user, currentUser), HttpStatus.OK);
     }
 
     @PutMapping("/user/profile/newsletter")
-    public void subscribe(@RequestParam(name = "is_subscribed") boolean subscribe, HttpServletRequest request) {
-        UserWithoutPassAndIsAdminDTO user = getUserById(getLoggedUserId(request));
-        userService.subscribe(subscribe, user);
+    public ResponseEntity<UserWithoutPasswordDTO> subscribe(@RequestParam(name = "is_subscribed") boolean subscribe, HttpServletRequest request) {
+        UserWithoutPasswordDTO user = getUserById(getLoggedUserId(request));
+        return new ResponseEntity<>(userService.subscribe(subscribe, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/profile")
     public void deleteUser(@Valid @RequestBody DeleteUserDTO userForDeleting, HttpServletRequest request) {
-        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
         userService.deleteUser(userForDeleting, currentUser);
         logout(request.getSession());
     }
 
     @GetMapping("/products/{pid}/fav")
-    public void addProductToFavorites(@PathVariable int pid, HttpServletRequest request) {
+    public ResponseEntity<UserWithoutPasswordDTO> addProductToFavorites(@PathVariable int pid, HttpServletRequest request) {
         if (pid < 1) {
             throw new NotFoundException("Product not found");
         }
-        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
-        userService.addProductToFavorites(pid, currentUser);
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
+        return new ResponseEntity<>(userService.addProductToFavorites(pid, currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/user/profile/upload-picture")
     public String uploadProfileImage(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
-        UserWithoutPassAndIsAdminDTO currentUser = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
         return userService.uploadProfileImage(file, currentUser);
     }
 }

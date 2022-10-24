@@ -27,7 +27,7 @@ public class UserService extends AbstractService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserWithoutPassAndIsAdminDTO login(LoginDTO loginDTO) {
+    public UserWithoutPasswordDTO login(LoginDTO loginDTO) {
         if (!isValidPassword(loginDTO.getPassword())) {
             throw new BadRequestException("Wrong credentials!");
         }
@@ -38,7 +38,7 @@ public class UserService extends AbstractService {
             throw new BadRequestException("Wrong credentials!");
         }
 
-        UserWithoutPassAndIsAdminDTO u = modelMapper.map(user, UserWithoutPassAndIsAdminDTO.class);
+        UserWithoutPasswordDTO u = modelMapper.map(user, UserWithoutPasswordDTO.class);
         u.setAddresses(u.getAddresses().stream()
                 .map(a -> modelMapper.map(a, AddressWithoutOwnerDTO.class)).collect(Collectors.toList()));
         u.setReviews(u.getReviews().stream()
@@ -82,12 +82,12 @@ public class UserService extends AbstractService {
         return false;
     }
 
-    public UserWithoutPassAndIsAdminDTO getById(int uid) {
+    public UserWithoutPasswordDTO getById(int uid) {
         User result = userRepository.getById(uid).orElseThrow(() -> new NotFoundException("User not found"));
-        return modelMapper.map(result, UserWithoutPassAndIsAdminDTO.class);
+        return modelMapper.map(result, UserWithoutPasswordDTO.class);
     }
 
-    public UserWithoutPassAndIsAdminDTO registerUser(RegisterDTO userForRegistration) {
+    public UserWithoutPasswordDTO registerUser(RegisterDTO userForRegistration) {
         if (!isValidPassword(userForRegistration.getPassword())) {
             throw new BadRequestException("The password should be at least 8 characters and have one " +
                     "uppercase letter, one lowercase letter and special symbol");
@@ -106,36 +106,31 @@ public class UserService extends AbstractService {
             userForSavingInDb.setAdmin(true);
         }
         userRepository.save(userForSavingInDb);
-        return modelMapper.map(userForRegistration, UserWithoutPassAndIsAdminDTO.class);
+        return modelMapper.map(userForRegistration, UserWithoutPasswordDTO.class);
     }
 
-    public void subscribe(boolean subscribe, UserWithoutPassAndIsAdminDTO user) {
+    public UserWithoutPasswordDTO subscribe(boolean subscribe, UserWithoutPasswordDTO user) {
         User u = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new NotFoundException("user not found"));
         u.setSubscribed(subscribe);
         userRepository.save(u);
+        return modelMapper.map(u, UserWithoutPasswordDTO.class);
     }
 
-    public void editProfile(EditProfileUserDTO user, UserWithoutPassAndIsAdminDTO u) {
+    public UserWithoutPasswordDTO editProfile(EditProfileUserDTO user, UserWithoutPasswordDTO u) {
         User user2 = userRepository.findByEmail(u.getEmail())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-
-        user2.setFirstName(user.getFirstName());
-        user2.setLastName(user.getLastName());
-        user2.setEmail(user.getEmail());
-        user2.setPhoneNumber(user.getPhoneNumber());
-        user2.setGender(user.getGender());
-
         if (!user.getRepeatPassword().equals(user.getPassword())) {
             throw new BadRequestException("Passwords don't match!");
         }
+        modelMapper.map(user, user2);
         userRepository.save(user2);
+        return modelMapper.map(user2, UserWithoutPasswordDTO.class);
     }
 
-    public void changePassword(ChangePasswordDTO user, UserWithoutPassAndIsAdminDTO currentUser) {
+    public UserWithoutPasswordDTO changePassword(ChangePasswordDTO user, UserWithoutPasswordDTO currentUser) {
         User u = userRepository.findByEmail(currentUser.getEmail())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        System.out.println(u.toString());
         if (!bCryptPasswordEncoder.matches(user.getPassword(), u.getPassword())) {
             throw new BadRequestException("Bad request");
         }
@@ -144,9 +139,10 @@ public class UserService extends AbstractService {
         }
         u.setPassword(bCryptPasswordEncoder.encode(user.getNewPassword()));
         userRepository.save(u);
+        return modelMapper.map(u, UserWithoutPasswordDTO.class);
     }
 
-    public void deleteUser(DeleteUserDTO userForDeleting, UserWithoutPassAndIsAdminDTO currentUser) {
+    public void deleteUser(DeleteUserDTO userForDeleting, UserWithoutPasswordDTO currentUser) {
         if (!userForDeleting.getPassword().equals(userForDeleting.getConfirm_password())) {
             throw new UnauthorizedException("Passwords don't match");
         }
@@ -160,15 +156,16 @@ public class UserService extends AbstractService {
         userRepository.save(user);
     }
 
-    public void addProductToFavorites(int pid, UserWithoutPassAndIsAdminDTO currentUser) {
+    public UserWithoutPasswordDTO addProductToFavorites(int pid, UserWithoutPasswordDTO currentUser) {
         Product product = productRepository.findProductById(pid)
                 .orElseThrow(() -> new NotFoundException("Product wasn't found"));
         User user = modelMapper.map(currentUser, User.class);
         user.getLikedProducts().add(product);
         userRepository.save(user);
+        return modelMapper.map(user, UserWithoutPasswordDTO.class);
     }
 
-    public String uploadProfileImage(MultipartFile file, UserWithoutPassAndIsAdminDTO currentUser) {
+    public String uploadProfileImage(MultipartFile file, UserWithoutPasswordDTO currentUser) {
         try {
             User user = userRepository.getById(currentUser.getId())
                     .orElseThrow(() -> new NotFoundException("User not found"));

@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UserWithoutPassAndIsAdminDTO {
+public class UserWithoutPasswordDTO {
 
     private int id;
     private String firstName;
@@ -16,6 +16,7 @@ public class UserWithoutPassAndIsAdminDTO {
     private String phoneNumber;
     private String gender;
     private boolean isSubscribed;
+    private boolean isAdmin;
     private String profilePictureUrl;
     private List<AddressWithoutOwnerDTO> addresses;
     private List<ReviewWithoutOwnerDTO> reviews;
