@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "products")
@@ -41,4 +42,7 @@ public class Product {
 
     @ManyToMany(mappedBy = "likedProducts")
     Set<User> likedBy;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Images> images;
 }

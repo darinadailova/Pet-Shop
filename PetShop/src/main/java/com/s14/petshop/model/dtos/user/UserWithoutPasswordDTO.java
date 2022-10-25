@@ -1,7 +1,7 @@
 package com.s14.petshop.model.dtos.user;
 
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
-import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
+import com.s14.petshop.model.dtos.reviews.ReviewWithoutOwnerDTO;
 import lombok.Data;
 
 import java.util.List;
