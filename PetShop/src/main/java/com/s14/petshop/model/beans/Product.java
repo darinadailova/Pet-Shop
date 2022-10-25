@@ -38,8 +38,6 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    //todo add relation between product images, fav products
-
     @ManyToMany(mappedBy = "likedProducts")
     Set<User> likedBy;
 

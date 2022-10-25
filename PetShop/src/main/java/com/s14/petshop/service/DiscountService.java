@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Discount;
 import com.s14.petshop.model.dtos.discount.DiscountAddDTO;
 import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
+import com.s14.petshop.model.dtos.discount.DiscountWithProductsDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.DiscountRepository;
@@ -16,10 +17,10 @@ public class DiscountService extends AbstractService {
     @Autowired
     private DiscountRepository discountRepository;
 
-    public DiscountResponseDTO getById(int did) {
+    public DiscountWithProductsDTO getById(int did) {
         checkId(did);
         Discount discount = getAllDiscountById(did);
-        DiscountResponseDTO dto = modelMapper.map(discount, DiscountResponseDTO.class);
+        DiscountWithProductsDTO dto = modelMapper.map(discount, DiscountWithProductsDTO.class);
         return dto;
     }
 

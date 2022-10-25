@@ -2,6 +2,7 @@ package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.discount.DiscountAddDTO;
 import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
+import com.s14.petshop.model.dtos.discount.DiscountWithProductsDTO;
 import com.s14.petshop.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class DiscountController extends AbstractController {
     }
 
     @GetMapping("/discounts/{did}")
-    public ResponseEntity<DiscountResponseDTO> getDiscountById(@PathVariable int did, HttpServletRequest request) {
+    public ResponseEntity<DiscountWithProductsDTO> getDiscountById(@PathVariable int did, HttpServletRequest request) {
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(discountService.getById(did), HttpStatus.OK);

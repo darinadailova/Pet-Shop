@@ -15,7 +15,8 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class DiscountResponseDTO {
+
+public class DiscountWithProductsDTO {
 
     @NotNull
     private int id;
@@ -34,5 +35,5 @@ public class DiscountResponseDTO {
     @NotNull
     private LocalDateTime endAt;
 
-
+    private List<ProductWithoutDiscountDTO> products;
 }
