@@ -1,7 +1,7 @@
 package com.s14.petshop.model.dtos.product;
 
-import com.s14.petshop.model.dtos.brand.BrandDTO;
-import com.s14.petshop.model.dtos.discount.DiscountDTO;
+import com.s14.petshop.model.dtos.brand.BrandResponseDTO;
+import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +28,8 @@ public class ProductWithoutSubDTO {
     private String info;
 
     @NotNull
-    private BrandDTO brand;
+    private BrandResponseDTO brand;
 
     @NotNull
-    private DiscountDTO discount;
+    private DiscountResponseDTO discount;
 }

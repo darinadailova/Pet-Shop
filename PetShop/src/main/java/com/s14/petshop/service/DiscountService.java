@@ -2,8 +2,7 @@ package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Discount;
 import com.s14.petshop.model.dtos.discount.DiscountAddDTO;
-import com.s14.petshop.model.dtos.discount.DiscountDTO;
-import com.s14.petshop.model.dtos.discount.DiscountWithProductsDTO;
+import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.DiscountRepository;
@@ -17,25 +16,25 @@ public class DiscountService extends AbstractService {
     @Autowired
     private DiscountRepository discountRepository;
 
-    public DiscountDTO getById(int did) {
+    public DiscountResponseDTO getById(int did) {
         checkId(did);
         Discount discount = getAllDiscountById(did);
-        DiscountDTO dto = modelMapper.map(discount, DiscountDTO.class);
+        DiscountResponseDTO dto = modelMapper.map(discount, DiscountResponseDTO.class);
         return dto;
     }
 
-    public DiscountDTO addDiscount(DiscountAddDTO dto) {
+    public DiscountResponseDTO addDiscount(DiscountAddDTO dto) {
         if (discountRepository.existsByName(dto.getName())) {
             throw new BadRequestException("Discount already exists!");
         }
         Discount discount = modelMapper.map(dto, Discount.class);
         discountRepository.save(discount);
 
-        DiscountDTO resultDTO = modelMapper.map(discount, DiscountDTO.class);
+        DiscountResponseDTO resultDTO = modelMapper.map(discount, DiscountResponseDTO.class);
         return resultDTO;
     }
 
-    public DiscountDTO editDiscount(DiscountAddDTO dto, int did) {
+    public DiscountResponseDTO editDiscount(DiscountAddDTO dto, int did) {
         checkId(did);
         Discount discount = discountRepository
                 .findById(did).orElseThrow(() -> new NotFoundException("Discount cannot be edit"));
@@ -45,7 +44,7 @@ public class DiscountService extends AbstractService {
         discount.setStartAt(dto.getStartAt());
         discount.setEndAt(dto.getEndAt());
         discountRepository.save(discount);
-        return modelMapper.map(discount, DiscountDTO.class);
+        return modelMapper.map(discount, DiscountResponseDTO.class);
     }
 
     public Discount getAllDiscountById(int did) {

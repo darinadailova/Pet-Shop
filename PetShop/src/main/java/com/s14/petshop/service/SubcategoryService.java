@@ -2,7 +2,7 @@ package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Category;
 import com.s14.petshop.model.beans.Subcategory;
-import com.s14.petshop.model.dtos.category.CategoryDTO;
+import com.s14.petshop.model.dtos.category.CategoryResponseDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryAddDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -50,7 +50,7 @@ public class SubcategoryService extends AbstractService {
                 .orElseThrow(() -> new NotFoundException("Subcategory does not exist!"));
     }
 
-    public List<CategoryDTO> getAllSubcategories() {
+    public List<CategoryResponseDTO> getAllSubcategories() {
         return categoryService.getAllCategories();
     }
 

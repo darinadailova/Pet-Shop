@@ -2,7 +2,7 @@ package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
-import com.s14.petshop.model.dtos.product.ProductDTO;
+import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductEditDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
@@ -22,26 +22,26 @@ public class ProductService extends AbstractService {
     @Autowired
     private SubcategoryService subcategoryService;
 
-    public ProductDTO getById(int pid) {
+    public ProductResponseDTO getById(int pid) {
         checkId(pid);
         Product product = productRepository.findById(pid).orElseThrow(() -> new NotFoundException("Product not found!"));
-        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+        ProductResponseDTO dto = modelMapper.map(product, ProductResponseDTO.class);
         return dto;
     }
 
-    public ProductDTO addProduct(ProductAddDTO dto) {
+    public ProductResponseDTO addProduct(ProductAddDTO dto) {
         Product product = productRepository.findByName(dto.getName()).orElse(new Product());
         if (product.getQuantity() > 0) {
             product.setQuantity(product.getQuantity() + 1);
             productRepository.save(product);
-            ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
+            ProductResponseDTO dtoResult = modelMapper.map(product, ProductResponseDTO.class);
             return dtoResult;
         }
         product = createProduct(dto);
 
         productRepository.save(product);
 
-        ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
+        ProductResponseDTO dtoResult = modelMapper.map(product, ProductResponseDTO.class);
         return dtoResult;
     }
 
@@ -58,29 +58,29 @@ public class ProductService extends AbstractService {
         return product;
     }
 
-    public ProductDTO deleteProduct(int pid) {
+    public ProductResponseDTO deleteProduct(int pid) {
         checkId(pid);
         Product product = productRepository.findById(pid)
                 .orElseThrow(() -> new NotFoundException("Product does not exist!"));
 
-        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+        ProductResponseDTO dto = modelMapper.map(product, ProductResponseDTO.class);
 
         productRepository.delete(product);
 
         return dto;
     }
 
-    public ProductDTO searchWithName(String dto) {
+    public ProductResponseDTO searchWithName(String dto) {
         if (dto == null || dto.isEmpty()) {
             throw new BadRequestException("Enter name for searching");
         }
         Product product = productRepository.findByNameIsLikeIgnoreCase(dto)
                 .orElseThrow(() -> new NotFoundException("Product does not exist"));
-        ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
+        ProductResponseDTO dtoResult = modelMapper.map(product, ProductResponseDTO.class);
         return dtoResult;
     }
 
-    public ProductDTO addDiscountToProduct(int pid, int did) {
+    public ProductResponseDTO addDiscountToProduct(int pid, int did) {
         checkId(pid);
         checkId(did);
         Product product = productRepository.findById(pid).
@@ -89,12 +89,12 @@ public class ProductService extends AbstractService {
         product.setDiscount(discountService.getAllDiscountById(did));
         productRepository.save(product);
 
-        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+        ProductResponseDTO dto = modelMapper.map(product, ProductResponseDTO.class);
         return dto;
     }
 
 
-    public ProductDTO editProduct(ProductEditDTO dto, int pid) {
+    public ProductResponseDTO editProduct(ProductEditDTO dto, int pid) {
         checkId(pid);
         Product product = productRepository.findById(pid)
                 .orElseThrow(() -> new NotFoundException("Product does not exist"));
@@ -105,7 +105,7 @@ public class ProductService extends AbstractService {
 
         productRepository.save(product);
 
-        ProductDTO result = modelMapper.map(product,ProductDTO.class);
+        ProductResponseDTO result = modelMapper.map(product, ProductResponseDTO.class);
         return result;
     }
 }

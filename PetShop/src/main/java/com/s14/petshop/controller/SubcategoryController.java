@@ -1,7 +1,6 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.beans.Subcategory;
-import com.s14.petshop.model.dtos.category.CategoryDTO;
+import com.s14.petshop.model.dtos.category.CategoryResponseDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryAddDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryDTO;
 import com.s14.petshop.service.SubcategoryService;
@@ -39,7 +38,7 @@ public class SubcategoryController extends AbstractController {
     }
 
     @GetMapping("/subcategories")
-    public ResponseEntity<List<CategoryDTO>> getAllSubcategories(HttpServletRequest request){
+    public ResponseEntity<List<CategoryResponseDTO>> getAllSubcategories(HttpServletRequest request){
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(subcategoryService.getAllSubcategories(), HttpStatus.OK);

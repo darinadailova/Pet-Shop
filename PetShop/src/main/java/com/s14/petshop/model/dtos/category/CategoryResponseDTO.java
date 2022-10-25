@@ -1,6 +1,5 @@
 package com.s14.petshop.model.dtos.category;
 
-import com.s14.petshop.model.beans.Subcategory;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryWithoutCategoryDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDTO {
+public class CategoryResponseDTO {
 
     @NotNull
     private int id;

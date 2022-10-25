@@ -1,10 +1,11 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.discount.DiscountAddDTO;
-import com.s14.petshop.model.dtos.discount.DiscountDTO;
-import com.s14.petshop.model.dtos.discount.DiscountWithProductsDTO;
+import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
 import com.s14.petshop.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,29 +19,29 @@ public class DiscountController extends AbstractController {
     private DiscountService discountService;
 
     @PostMapping("/discounts")
-    public DiscountDTO addDiscount(@Valid @RequestBody DiscountAddDTO dto, HttpServletRequest request) {
+    public ResponseEntity<DiscountResponseDTO> addDiscount(@Valid @RequestBody DiscountAddDTO dto, HttpServletRequest request) {
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.isUserAdmin(userId);
 
-        return discountService.addDiscount(dto);
+        return new ResponseEntity<>(discountService.addDiscount(dto), HttpStatus.OK);
     }
 
     @GetMapping("/discounts/{did}")
-    public DiscountDTO getDiscountById(@PathVariable int did, HttpServletRequest request) {
+    public ResponseEntity<DiscountResponseDTO> getDiscountById(@PathVariable int did, HttpServletRequest request) {
         checkIfUserIsLogged(request);
 
-        return discountService.getById(did);
+        return new ResponseEntity<>(discountService.getById(did), HttpStatus.OK);
     }
 
     @PutMapping("/discounts/{did}")
-    public DiscountDTO editDiscount(@Valid @RequestBody DiscountAddDTO dto, @PathVariable int did, HttpServletRequest request) {
+    public ResponseEntity<DiscountResponseDTO> editDiscount(@Valid @RequestBody DiscountAddDTO dto, @PathVariable int did, HttpServletRequest request) {
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.isUserAdmin(userId);
 
-        return discountService.editDiscount(dto, did);
+        return new ResponseEntity<>(discountService.editDiscount(dto, did), HttpStatus.OK);
     }
 }

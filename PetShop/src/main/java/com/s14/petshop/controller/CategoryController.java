@@ -1,6 +1,6 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.category.CategoryDTO;
+import com.s14.petshop.model.dtos.category.CategoryResponseDTO;
 import com.s14.petshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,14 +17,14 @@ public class CategoryController extends AbstractController {
     private CategoryService categoryService;
 
     @GetMapping("categories/{cid}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable int cid, HttpServletRequest request){
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable int cid, HttpServletRequest request){
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(categoryService.getById(cid), HttpStatus.OK);
     }
 
     @PostMapping("/categories")
-    public ResponseEntity<CategoryDTO> addCategory(@RequestParam String name, HttpServletRequest request){
+    public ResponseEntity<CategoryResponseDTO> addCategory(@RequestParam String name, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
@@ -34,14 +34,14 @@ public class CategoryController extends AbstractController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories (HttpServletRequest request){
+    public ResponseEntity<List<CategoryResponseDTO>> getAllCategories (HttpServletRequest request){
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @DeleteMapping("categories/{cid}")
-    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable int cid, HttpServletRequest request){
+    public ResponseEntity<CategoryResponseDTO> deleteCategory(@PathVariable int cid, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
