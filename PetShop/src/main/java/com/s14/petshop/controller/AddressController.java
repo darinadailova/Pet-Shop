@@ -1,8 +1,11 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.address.AddingAddress;
+import com.s14.petshop.model.dtos.address.AddressWithOwnerIdDTO;
 import com.s14.petshop.model.dtos.user.UserWithoutPasswordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +20,8 @@ public class AddressController extends AbstractController{
     UserController userController;
 
     @PostMapping("/user/profile/add-address")
-    public void addAddress(@Valid @RequestBody AddingAddress address, HttpServletRequest request) {
+    public ResponseEntity<AddressWithOwnerIdDTO> addAddress(@Valid @RequestBody AddingAddress address, HttpServletRequest request) {
         UserWithoutPasswordDTO currentUser = userController.getUserById(getLoggedUserId(request));
-        addressService.addAddress(address, currentUser);
+        return new ResponseEntity<>(addressService.addAddress(address, currentUser), HttpStatus.OK);
     }
 }

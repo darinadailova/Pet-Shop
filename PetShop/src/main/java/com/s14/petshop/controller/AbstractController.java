@@ -99,10 +99,4 @@ public abstract class AbstractController {
             throw new UnauthorizedException("You have to login!");
         }
     }
-
-    public static boolean isUserAdmin(String email) {
-        Pattern pattern = Pattern.compile("[a-z,A-Z,0-9]+@petshop.bg$");
-        Matcher matcher = pattern.matcher(email);
-        return matcher.find();
-    }
 }
