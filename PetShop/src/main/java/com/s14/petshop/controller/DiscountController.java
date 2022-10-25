@@ -6,6 +6,10 @@ import com.s14.petshop.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
 @RestController
 public class DiscountController extends AbstractController {
 
@@ -13,24 +17,29 @@ public class DiscountController extends AbstractController {
     private DiscountService discountService;
 
     @PostMapping("/discounts")
-    public DiscountDTO addDiscount(@RequestBody DiscountAddDTO dto){
-        //todo login and admin
+    public DiscountDTO addDiscount(@Valid @RequestBody DiscountAddDTO dto, HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.isUserAdmin(userId);
 
         return discountService.addDiscount(dto);
     }
 
     @GetMapping("/discounts/{did}")
-    public DiscountDTO getDiscountById(@PathVariable int did ){
-        // todo login
+    public DiscountDTO getDiscountById(@PathVariable int did, HttpServletRequest request ){
+        checkIfUserIsLogged(request);
 
         return discountService.getById(did);
     }
 
     @PutMapping("/discounts/{did}")
-    public boolean editDiscount(@RequestBody DiscountAddDTO dto, @PathVariable int did){
-        // todo login admin
+    public boolean editDiscount(@Valid @RequestBody DiscountAddDTO dto, @PathVariable int did, HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.isUserAdmin(userId);
 
         return discountService.editDiscount(dto, did);
     }
-
 }

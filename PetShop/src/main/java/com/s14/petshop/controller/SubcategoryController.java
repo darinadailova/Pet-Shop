@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,25 +21,35 @@ public class SubcategoryController extends AbstractController {
 
     @GetMapping("subcategories/{sid}")
     public SubcategoryDTO getSubcategoryById(@PathVariable int sid, HttpServletRequest request){
-        //todo login
+        checkIfUserIsLogged(request);
+
         return subcategoryService.getById(sid);
     }
 
     @PostMapping("/subcategories")
-    public SubcategoryDTO addSubcategory(@RequestBody SubcategoryAddDTO dto){
-        //todo login admin
+    public SubcategoryDTO addSubcategory(@Valid @RequestBody SubcategoryAddDTO dto, HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.isUserAdmin(userId);
+
         return subcategoryService.addSubcategory(dto);
     }
 
     @GetMapping("/subcategories")
-    public List<CategoryDTO> getAllSubcategories (){
-        //todo login
+    public List<CategoryDTO> getAllSubcategories(HttpServletRequest request){
+        checkIfUserIsLogged(request);
+
         return subcategoryService.getAllSubcategories();
     }
 
     @DeleteMapping("/subcategories/{sid}")
-    public boolean deleteCategory(@PathVariable int sid){
-        //todo login admin
+    public boolean deleteCategory(@PathVariable int sid, HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.isUserAdmin(userId);
+
        return subcategoryService.deleteSubcategory(sid);
     }
 }
