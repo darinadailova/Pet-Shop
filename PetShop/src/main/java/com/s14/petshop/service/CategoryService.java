@@ -17,6 +17,7 @@ public class CategoryService extends AbstractService {
     private CategoryRepository categoryRepository;
 
     public CategoryDTO getById(int cid) {
+        checkId(cid);
         Category category = categoryRepository.findById(cid)
                 .orElseThrow(() -> new NotFoundException("Category does not exist!"));
         CategoryDTO dto = modelMapper.map(category, CategoryDTO.class);
@@ -24,6 +25,9 @@ public class CategoryService extends AbstractService {
     }
 
     public CategoryDTO addCategory(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new BadRequestException("Enter valid name");
+        }
         if (categoryRepository.findByName(name).isPresent()) {
             throw new BadRequestException("Category already exists!");
         }
@@ -46,15 +50,17 @@ public class CategoryService extends AbstractService {
         return result;
     }
 
-    public boolean deleteCategory(int cid) {
-        if(!categoryRepository.existsById(cid)){
-            throw new NotFoundException("Category cannot be deleted!");
-        }
-        categoryRepository.deleteById(cid);
-        return true;
+    public CategoryDTO deleteCategory(int cid) {
+        checkId(cid);
+        Category category = categoryRepository.findById(cid)
+                .orElseThrow(() ->new NotFoundException("Subcategory cannot be deleted!"));
+        CategoryDTO dto = modelMapper.map(category, CategoryDTO.class);
+        categoryRepository.delete(category);
+        return dto;
     }
 
     public Category getAllCategoryById(int cid) {
+        checkId(cid);
         return categoryRepository.findById(cid)
                 .orElseThrow(() -> new NotFoundException("Category does not exist!"));
     }

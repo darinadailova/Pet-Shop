@@ -21,4 +21,6 @@ public class BrandDTO {
 
     @NotNull
     private String logoUrl;
+
+    //List<ProductWithoutBrandDTO> products;
 }

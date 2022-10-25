@@ -16,6 +16,7 @@ public class BrandService extends AbstractService {
     private BrandRepository brandRepository;
 
     public Brand getById(int bid) {
+        checkId(bid);
        return brandRepository.findById(bid).orElseThrow(() -> new NotFoundException("Brand does not found"));
     }
 

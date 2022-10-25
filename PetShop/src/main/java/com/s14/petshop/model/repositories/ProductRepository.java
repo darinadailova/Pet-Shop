@@ -8,6 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    Optional<Product> findByName(String name);
+    Optional<Product> findByNameIsLikeIgnoreCase(String name);
     Optional<Product> findProductById(int id);
+
+    Optional<Product> findByName(String name);
 }

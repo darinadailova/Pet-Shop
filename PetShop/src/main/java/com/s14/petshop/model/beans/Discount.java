@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity(name = "discounts")
 @Setter
@@ -26,4 +27,7 @@ public class Discount {
     private LocalDateTime startAt;
     @Column
     private LocalDateTime endAt;
+
+    @OneToMany(mappedBy = "discount")
+    private List<Product> products;
 }

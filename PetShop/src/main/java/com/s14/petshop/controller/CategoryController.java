@@ -3,6 +3,8 @@ package com.s14.petshop.controller;
 import com.s14.petshop.model.dtos.category.CategoryDTO;
 import com.s14.petshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,36 +17,36 @@ public class CategoryController extends AbstractController {
     private CategoryService categoryService;
 
     @GetMapping("categories/{cid}")
-    public CategoryDTO getCategoryById(@PathVariable int cid, HttpServletRequest request){
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable int cid, HttpServletRequest request){
         checkIfUserIsLogged(request);
 
-        return categoryService.getById(cid);
+        return new ResponseEntity<>(categoryService.getById(cid), HttpStatus.OK);
     }
 
     @PostMapping("/categories")
-    public CategoryDTO addCategory(@RequestParam String name, HttpServletRequest request){
+    public ResponseEntity<CategoryDTO> addCategory(@RequestParam String name, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.isUserAdmin(userId);
 
-        return categoryService.addCategory(name);
+        return new ResponseEntity<>(categoryService.addCategory(name), HttpStatus.OK);
     }
 
     @GetMapping("/categories")
-    public List<CategoryDTO> getAllCategories (HttpServletRequest request){
+    public ResponseEntity<List<CategoryDTO>> getAllCategories (HttpServletRequest request){
         checkIfUserIsLogged(request);
 
-        return categoryService.getAllCategories();
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @DeleteMapping("categories/{cid}")
-    public boolean deleteCategory(@PathVariable int cid, HttpServletRequest request){
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable int cid, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
         userService.isUserAdmin(userId);
 
-        return categoryService.deleteCategory(cid);
+        return new ResponseEntity<>(categoryService.deleteCategory(cid), HttpStatus.OK);
     }
 }

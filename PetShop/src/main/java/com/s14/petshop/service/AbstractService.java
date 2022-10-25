@@ -1,5 +1,6 @@
 package com.s14.petshop.service;
 
+import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.repositories.AddressRepository;
 import com.s14.petshop.model.repositories.ProductRepository;
 import com.s14.petshop.model.repositories.UserRepository;
@@ -17,4 +18,9 @@ public abstract class AbstractService {
     @Autowired
     protected ProductRepository productRepository;
 
+    void checkId(int id){
+        if(id < 1){
+            throw new BadRequestException("Id must be positive");
+        }
+    }
 }

@@ -21,7 +21,9 @@ public class SubcategoryService extends AbstractService {
 
     @Autowired
     private CategoryService categoryService;
+
     public SubcategoryDTO getById(int sid) {
+        checkId(sid);
         Subcategory subcategory = subcategoryRepository.findById(sid)
                 .orElseThrow(() -> new NotFoundException("Subcategory does not exist!"));
         SubcategoryDTO dto = modelMapper.map(subcategory, SubcategoryDTO.class);
@@ -29,7 +31,7 @@ public class SubcategoryService extends AbstractService {
     }
 
     public SubcategoryDTO addSubcategory(SubcategoryAddDTO dto) {
-        if(subcategoryRepository.existsByName(dto.getName())){
+        if (subcategoryRepository.existsByName(dto.getName())) {
             throw new BadRequestException("Subcategory already exists!");
         }
         Subcategory subcategory = new Subcategory();
@@ -43,6 +45,7 @@ public class SubcategoryService extends AbstractService {
     }
 
     public Subcategory getAllSubById(int sid) {
+        checkId(sid);
         return subcategoryRepository.findById(sid)
                 .orElseThrow(() -> new NotFoundException("Subcategory does not exist!"));
     }
@@ -51,11 +54,13 @@ public class SubcategoryService extends AbstractService {
         return categoryService.getAllCategories();
     }
 
-    public boolean deleteSubcategory(int sid) {
-        if(!subcategoryRepository.existsById(sid)){
-            throw new NotFoundException("Subcategory cannot be deleted!");
-        }
-        subcategoryRepository.deleteById(sid);
-        return true;
+    public SubcategoryDTO deleteSubcategory(int sid) {
+        checkId(sid);
+        Subcategory subcategory = subcategoryRepository.findById(sid)
+                .orElseThrow(() ->  new NotFoundException("Subcategory cannot be deleted!"));
+        SubcategoryDTO dto = modelMapper.map(subcategory, SubcategoryDTO.class);
+
+        subcategoryRepository.delete(subcategory);
+        return dto;
     }
 }

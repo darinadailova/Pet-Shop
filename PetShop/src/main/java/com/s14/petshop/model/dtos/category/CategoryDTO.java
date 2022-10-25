@@ -23,6 +23,5 @@ public class CategoryDTO {
     @NotBlank
     private String name;
 
-
     private List<SubcategoryWithoutCategoryDTO> subcategories;
 }

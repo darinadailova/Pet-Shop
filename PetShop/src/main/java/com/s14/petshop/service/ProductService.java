@@ -23,6 +23,7 @@ public class ProductService extends AbstractService {
     private SubcategoryService subcategoryService;
 
     public ProductDTO getById(int pid) {
+        checkId(pid);
         Product product = productRepository.findById(pid).orElseThrow(() -> new NotFoundException("Product not found!"));
         ProductDTO dto = modelMapper.map(product, ProductDTO.class);
         return dto;
@@ -57,28 +58,31 @@ public class ProductService extends AbstractService {
         return product;
     }
 
-    public boolean deleteProduct(int pid) {
+    public ProductDTO deleteProduct(int pid) {
+        checkId(pid);
         Product product = productRepository.findById(pid)
                 .orElseThrow(() -> new NotFoundException("Product does not exist!"));
-        if (product.getQuantity() > 0) {
-            product.setQuantity(product.getQuantity() - 1);
-            productRepository.save(product);
-            return true;
-        }
-        throw new BadRequestException("Product is already out of stock");
+
+        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+
+        productRepository.delete(product);
+
+        return dto;
     }
 
     public ProductDTO searchWithName(String dto) {
         if (dto == null || dto.isEmpty()) {
             throw new BadRequestException("Enter name for searching");
         }
-        Product product = productRepository.findByName(dto)
+        Product product = productRepository.findByNameIsLikeIgnoreCase(dto)
                 .orElseThrow(() -> new NotFoundException("Product does not exist"));
         ProductDTO dtoResult = modelMapper.map(product, ProductDTO.class);
         return dtoResult;
     }
 
     public ProductDTO addDiscountToProduct(int pid, int did) {
+        checkId(pid);
+        checkId(did);
         Product product = productRepository.findById(pid).
                 orElseThrow(() -> new NotFoundException("The product does not exist"));
 
@@ -91,6 +95,7 @@ public class ProductService extends AbstractService {
 
 
     public ProductDTO editProduct(ProductEditDTO dto, int pid) {
+        checkId(pid);
         Product product = productRepository.findById(pid)
                 .orElseThrow(() -> new NotFoundException("Product does not exist"));
 

@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Discount;
 import com.s14.petshop.model.dtos.discount.DiscountAddDTO;
 import com.s14.petshop.model.dtos.discount.DiscountDTO;
+import com.s14.petshop.model.dtos.discount.DiscountWithProductsDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.DiscountRepository;
@@ -17,6 +18,7 @@ public class DiscountService extends AbstractService {
     private DiscountRepository discountRepository;
 
     public DiscountDTO getById(int did) {
+        checkId(did);
         Discount discount = getAllDiscountById(did);
         DiscountDTO dto = modelMapper.map(discount, DiscountDTO.class);
         return dto;
@@ -33,7 +35,8 @@ public class DiscountService extends AbstractService {
         return resultDTO;
     }
 
-    public boolean editDiscount(DiscountAddDTO dto, int did) {
+    public DiscountDTO editDiscount(DiscountAddDTO dto, int did) {
+        checkId(did);
         Discount discount = discountRepository
                 .findById(did).orElseThrow(() -> new NotFoundException("Discount cannot be edit"));
 
@@ -42,10 +45,11 @@ public class DiscountService extends AbstractService {
         discount.setStartAt(dto.getStartAt());
         discount.setEndAt(dto.getEndAt());
         discountRepository.save(discount);
-        return true;
+        return modelMapper.map(discount, DiscountDTO.class);
     }
 
     public Discount getAllDiscountById(int did) {
+        checkId(did);
         return discountRepository.findById(did)
                 .orElseThrow(() -> new NotFoundException("Discount does not exist!"));
     }

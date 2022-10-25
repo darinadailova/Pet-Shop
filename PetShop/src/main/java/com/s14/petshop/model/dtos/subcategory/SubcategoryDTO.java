@@ -1,12 +1,14 @@
 package com.s14.petshop.model.dtos.subcategory;
 
 import com.s14.petshop.model.dtos.category.CategoryWithoutSubsDTO;
+import com.s14.petshop.model.dtos.product.ProductWithoutSubDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Setter
 @Getter
@@ -22,4 +24,6 @@ public class SubcategoryDTO {
 
     @NotNull
     private CategoryWithoutSubsDTO category;
+
+    List<ProductWithoutSubDTO> products;
 }
