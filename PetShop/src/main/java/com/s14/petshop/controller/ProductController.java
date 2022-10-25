@@ -3,9 +3,13 @@ package com.s14.petshop.controller;
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
 import com.s14.petshop.model.dtos.product.ProductDTO;
 import com.s14.petshop.model.dtos.product.ProductEditDTO;
+import com.s14.petshop.model.dtos.user.UserWithoutPasswordDTO;
 import com.s14.petshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class ProductController extends AbstractController {
@@ -55,5 +59,12 @@ public class ProductController extends AbstractController {
 
         return productService.editProduct(dto,pid);
     }
+
+//    @PostMapping("/products/{pid}/upload-picture")
+//    public String uploadProfileImage(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
+//        // todo check is user is admin
+//        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
+//        return userService.uploadProfileImage(file, currentUser);
+//    }
 
 }

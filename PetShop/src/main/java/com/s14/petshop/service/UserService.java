@@ -1,10 +1,9 @@
 package com.s14.petshop.service;
 
-import com.s14.petshop.controller.AbstractController;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
-import com.s14.petshop.model.dtos.ReviewWithoutOwnerDTO;
+import com.s14.petshop.model.dtos.reviews.ReviewWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
