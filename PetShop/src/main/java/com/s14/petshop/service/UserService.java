@@ -213,4 +213,11 @@ public class UserService extends AbstractService {
                 extension.equals("heic"));
 
     }
+
+    public void isUserAdmin(int userId) {
+        UserWithoutPasswordDTO user = getById(userId);
+        if(!user.isAdmin()){
+            throw new UnauthorizedException("You have no rights!");
+        }
+    }
 }
