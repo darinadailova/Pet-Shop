@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,11 +104,18 @@ public class UserService extends AbstractService {
 
         User userForSavingInDb = modelMapper.map(userForRegistration, User.class);
         userForSavingInDb.setPassword(bCryptPasswordEncoder.encode(userForSavingInDb.getPassword()));
-        if (AbstractController.isUserAdmin(userForSavingInDb.getEmail())) {
+
+        if (isUserAdmin(userForSavingInDb.getEmail())) {
             userForSavingInDb.setAdmin(true);
         }
         userRepository.save(userForSavingInDb);
         return modelMapper.map(userForRegistration, UserWithoutPasswordDTO.class);
+    }
+
+    private boolean isUserAdmin(String email) {
+        Pattern pattern = Pattern.compile("[a-z,A-Z,0-9]+@petshop.bg$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
     }
 
     public UserWithoutPasswordDTO subscribe(boolean subscribe, UserWithoutPasswordDTO user) {
@@ -122,6 +131,9 @@ public class UserService extends AbstractService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         if (!user.getRepeatPassword().equals(user.getPassword())) {
             throw new BadRequestException("Passwords don't match!");
+        }
+        if (!user.getPassword().equals(user2.getPassword())) {
+            throw new BadRequestException("Wrong password");
         }
         modelMapper.map(user, user2);
         userRepository.save(user2);
@@ -142,7 +154,7 @@ public class UserService extends AbstractService {
         return modelMapper.map(u, UserWithoutPasswordDTO.class);
     }
 
-    public void deleteUser(DeleteUserDTO userForDeleting, UserWithoutPasswordDTO currentUser) {
+    public UserWithoutPasswordDTO deleteUser(DeleteUserDTO userForDeleting, UserWithoutPasswordDTO currentUser) {
         if (!userForDeleting.getPassword().equals(userForDeleting.getConfirm_password())) {
             throw new UnauthorizedException("Passwords don't match");
         }
@@ -154,6 +166,7 @@ public class UserService extends AbstractService {
         user.setEmail("deleted" + user.getId());
         user.setPhoneNumber("deleted" + user.getId());
         userRepository.save(user);
+        return modelMapper.map(user, UserWithoutPasswordDTO.class);
     }
 
     public UserWithoutPasswordDTO addProductToFavorites(int pid, UserWithoutPasswordDTO currentUser) {

@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Address;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddingAddress;
+import com.s14.petshop.model.dtos.address.AddressWithOwnerIdDTO;
 import com.s14.petshop.model.dtos.user.UserWithoutPasswordDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 public class AddressService extends AbstractService{
-    public void addAddress(AddingAddress address, UserWithoutPasswordDTO currentUser) {
+    public AddressWithOwnerIdDTO addAddress(AddingAddress address, UserWithoutPasswordDTO currentUser) {
         User user = userRepository.findByEmail(currentUser.getEmail())
                 .orElseThrow(() -> new NotFoundException("user not found!"));
 
@@ -22,6 +23,7 @@ public class AddressService extends AbstractService{
             throw new BadRequestException("This address is already added!");
         }
         addressRepository.save(addressFroSavingInDb);
+        return modelMapper.map(addressFroSavingInDb, AddressWithOwnerIdDTO.class);
     }
 
     private boolean isAddressAlreadyAddedToUser(Address address, User user) {

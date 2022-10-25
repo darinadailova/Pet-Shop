@@ -66,10 +66,11 @@ public class UserController extends AbstractController {
     }
 
     @DeleteMapping("/user/profile")
-    public void deleteUser(@Valid @RequestBody DeleteUserDTO userForDeleting, HttpServletRequest request) {
+    public ResponseEntity<UserWithoutPasswordDTO> deleteUser(@Valid @RequestBody DeleteUserDTO userForDeleting, HttpServletRequest request) {
         UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
-        userService.deleteUser(userForDeleting, currentUser);
+        UserWithoutPasswordDTO result = userService.deleteUser(userForDeleting, currentUser);
         logout(request.getSession());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/products/{pid}/fav")
