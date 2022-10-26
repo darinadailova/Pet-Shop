@@ -5,10 +5,7 @@ import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.exceptions.UnauthorizedException;
-import com.s14.petshop.service.AddressService;
-import com.s14.petshop.service.CartService;
-import com.s14.petshop.service.ReviewService;
-import com.s14.petshop.service.UserService;
+import com.s14.petshop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -41,6 +38,9 @@ public abstract class AbstractController {
 
     @Autowired
     public CartService cartService;
+
+    @Autowired
+    public OrderService orderService;
 
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

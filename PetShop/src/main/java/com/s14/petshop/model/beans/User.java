@@ -42,6 +42,9 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "orderedBy")
+    private List<Order> orders;
+
     // todo add one to many relationship with orders
     @ManyToMany
     @JoinTable(
