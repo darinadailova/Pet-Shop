@@ -39,7 +39,7 @@ public class Product {
     private Discount discount;
 
     @ManyToMany(mappedBy = "likedProducts")
-    Set<User> likedBy;
+    private List<User> likedBy;
 
     @OneToMany(mappedBy = "owner")
     private List<Images> images;
