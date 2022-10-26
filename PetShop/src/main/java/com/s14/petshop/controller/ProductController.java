@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
+
 
 @RestController
 public class ProductController extends AbstractController {
@@ -77,9 +78,19 @@ public class ProductController extends AbstractController {
     }
 
     @GetMapping("/products/filter")
-    public ResponseEntity<List<ProductResponseDTO>> filterProducts(@RequestBody ProductFilterDTO dto, HttpServletRequest request){
+    public ResponseEntity<List<ProductResponseDTO>> filterProducts(@Valid @RequestBody ProductFilterDTO dto, HttpServletRequest request){
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(productService.filterProducts(dto), HttpStatus.OK);
+    }
+
+    @PostMapping("/products/{pid}/upload-image")
+    public ResponseEntity<ProductResponseDTO> uploadImage (@RequestParam(value = "file") MultipartFile file, @PathVariable int pid, HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute(USER_ID);
+        userService.isUserAdmin(userId);
+
+        return new ResponseEntity<>(productService.uploadImage(file, pid), HttpStatus.OK);
     }
 }

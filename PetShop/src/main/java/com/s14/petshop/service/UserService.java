@@ -208,14 +208,6 @@ public class UserService extends AbstractService {
         }
     }
 
-    private boolean checkImageExtension(String extension) {
-        extension = extension.toLowerCase();
-        return (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")
-                || extension.equals("gif") || extension.equals("raw") || extension.equals("svg") ||
-                extension.equals("heic"));
-
-    }
-
     public void isUserAdmin(int userId) {
         UserWithoutPasswordDTO user = getById(userId);
         if(!user.isAdmin()){

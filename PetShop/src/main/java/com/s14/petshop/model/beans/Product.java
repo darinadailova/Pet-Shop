@@ -41,7 +41,7 @@ public class Product {
     private List<User> favoredBy;
 
     @OneToMany(mappedBy = "owner")
-    private List<Images> images;
+    private List<Image> images;
 
     @OneToMany(mappedBy = "reviewedProduct")
     private List<Review> reviews;

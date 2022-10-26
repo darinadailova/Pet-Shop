@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
 public class BrandController extends AbstractController {
@@ -20,7 +21,7 @@ public class BrandController extends AbstractController {
     private BrandService brandService;
 
     @PostMapping("/brands")
-    public ResponseEntity<BrandResponseDTO> addBrand(@RequestBody BrandAddDTO dto, HttpServletRequest request){
+    public ResponseEntity<BrandResponseDTO> addBrand(@Valid @RequestBody BrandAddDTO dto, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
