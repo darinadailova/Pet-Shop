@@ -43,7 +43,7 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<Review> reviews;
 
-    // todo add many to many relationship for favorite products
+    // todo add one to many relationship with orders
     @ManyToMany
     @JoinTable(
             name = "users_have_favorite_products",

@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.repositories.AddressRepository;
 import com.s14.petshop.model.repositories.ProductRepository;
+import com.s14.petshop.model.repositories.ReviewRepository;
 import com.s14.petshop.model.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public abstract class AbstractService {
     protected ModelMapper modelMapper;
     @Autowired
     protected ProductRepository productRepository;
+
+    @Autowired
+    protected ReviewRepository reviewRepository;
 
     void checkId(int id){
         if(id < 1){

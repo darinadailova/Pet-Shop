@@ -19,7 +19,7 @@ public class Review {
     @Column
     private int rating;
     @Column
-    private String comment;
+    private String comment = "";
     @Column
     private LocalDateTime postedAt;
 
@@ -27,6 +27,8 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User owner;
 
-    // todo add many to one relationship for product id
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product reviewedProduct;
 
 }

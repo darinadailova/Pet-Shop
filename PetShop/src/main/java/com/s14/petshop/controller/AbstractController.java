@@ -5,6 +5,7 @@ import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.exceptions.UnauthorizedException;
 import com.s14.petshop.service.AddressService;
+import com.s14.petshop.service.ReviewService;
 import com.s14.petshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public abstract class AbstractController {
     public UserService userService;
     @Autowired
     public AddressService addressService;
+
+    @Autowired
+    public ReviewService reviewService;
 
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

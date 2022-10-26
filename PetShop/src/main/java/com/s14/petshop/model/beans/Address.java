@@ -30,6 +30,8 @@ public class Address {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    // todo add one to many relationship with orders
+
     public boolean equals(Address obj) {
         if (! (this.owner.getId() == obj.owner.getId() && this.city.equals(obj.getCity()) &&
                 this.postcode.equals(obj.getPostcode()) && this.streetAddress.equals(obj.getStreetAddress()))) {

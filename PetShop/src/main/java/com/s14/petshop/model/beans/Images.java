@@ -13,7 +13,7 @@ public class Images {
     private int id;
 
     @Column
-    private int imageUrl;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

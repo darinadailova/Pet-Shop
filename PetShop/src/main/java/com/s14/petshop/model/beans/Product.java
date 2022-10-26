@@ -43,4 +43,8 @@ public class Product {
 
     @OneToMany(mappedBy = "owner")
     private List<Images> images;
+
+    @OneToMany(mappedBy = "reviewedProduct")
+    private List<Review> reviews;
+
 }
