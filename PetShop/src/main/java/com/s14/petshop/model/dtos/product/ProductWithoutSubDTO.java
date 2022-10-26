@@ -30,6 +30,5 @@ public class ProductWithoutSubDTO {
     @NotNull
     private BrandResponseDTO brand;
 
-    @NotNull
     private DiscountResponseDTO discount;
 }

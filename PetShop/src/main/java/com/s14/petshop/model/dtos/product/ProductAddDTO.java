@@ -32,6 +32,5 @@ public class ProductAddDTO {
     @NotNull
     private int brand_id;
 
-    @NotNull
     private int discount_id;
 }

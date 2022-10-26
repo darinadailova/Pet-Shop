@@ -22,7 +22,7 @@ public class DiscountAddDTO {
     private String name;
 
     @NotNull
-    @Min(0)
+    @Min(1)
     @Max(70)
     private int percentDiscount;
 

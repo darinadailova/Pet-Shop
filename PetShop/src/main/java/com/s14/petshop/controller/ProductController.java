@@ -1,6 +1,7 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
+import com.s14.petshop.model.dtos.product.ProductFilterDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductEditDTO;
 import com.s14.petshop.service.ProductService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 public class ProductController extends AbstractController {
@@ -71,5 +74,12 @@ public class ProductController extends AbstractController {
         userService.isUserAdmin(userId);
 
         return new ResponseEntity<>(productService.editProduct(dto,pid), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/filter")
+    public ResponseEntity<List<ProductResponseDTO>> filterProducts(@RequestBody ProductFilterDTO dto, HttpServletRequest request){
+        checkIfUserIsLogged(request);
+
+        return new ResponseEntity<>(productService.filterProducts(dto), HttpStatus.OK);
     }
 }

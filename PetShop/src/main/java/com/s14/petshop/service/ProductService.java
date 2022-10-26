@@ -1,7 +1,9 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Product;
+import com.s14.petshop.model.dao.ProductFilterDAO;
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
+import com.s14.petshop.model.dtos.product.ProductFilterDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductEditDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -9,6 +11,11 @@ import com.s14.petshop.model.exceptions.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProductService extends AbstractService {
@@ -21,6 +28,9 @@ public class ProductService extends AbstractService {
     private BrandService brandService;
     @Autowired
     private SubcategoryService subcategoryService;
+
+    @Autowired
+    ProductFilterDAO dao;
 
     public ProductResponseDTO getById(int pid) {
         checkId(pid);
@@ -45,7 +55,7 @@ public class ProductService extends AbstractService {
         return dtoResult;
     }
 
-    private Product createProduct(ProductAddDTO dto){
+    private Product createProduct(ProductAddDTO dto) {
         Product product = new Product();
         product.setName(dto.getName());
         product.setInfo(dto.getInfo());
@@ -107,5 +117,16 @@ public class ProductService extends AbstractService {
 
         ProductResponseDTO result = modelMapper.map(product, ProductResponseDTO.class);
         return result;
+    }
+
+    public List<ProductResponseDTO> filterProducts(ProductFilterDTO dto) {
+        List<Integer> productsIds = dao.filterProducts(dto);
+
+        List<ProductResponseDTO> products = new ArrayList<>();
+
+        for (Integer productsId : productsIds) {
+            products.add(getById(productsId));
+        }
+        return products;
     }
 }

@@ -35,7 +35,6 @@ public class ProductResponseDTO {
     @NotNull
     private BrandResponseDTO brand;
 
-    @NotNull
     private DiscountResponseDTO discount;
 
     private List<ImageWithoutProductDTO> images;

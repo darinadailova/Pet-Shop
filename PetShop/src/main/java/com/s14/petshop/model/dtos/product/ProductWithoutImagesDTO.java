@@ -28,6 +28,5 @@ public class ProductWithoutImagesDTO {
     @NotNull
     private BrandResponseDTO brand;
 
-    @NotNull
     private DiscountResponseDTO discount;
 }
