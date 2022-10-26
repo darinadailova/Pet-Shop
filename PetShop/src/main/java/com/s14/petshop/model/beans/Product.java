@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity(name = "products")
 @Setter
@@ -38,8 +37,8 @@ public class Product {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    @ManyToMany(mappedBy = "likedProducts")
-    private List<User> likedBy;
+    @ManyToMany(mappedBy = "favProducts")
+    private List<User> favoredBy;
 
     @OneToMany(mappedBy = "owner")
     private List<Images> images;

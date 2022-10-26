@@ -73,7 +73,7 @@ public class UserController extends AbstractController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/products/{pid}/fav")
+    @PostMapping("/products/{pid}/fav")
     public ResponseEntity<UserWithoutPasswordDTO> addProductToFavorites(@PathVariable int pid, HttpServletRequest request) {
         if (pid < 1) {
             throw new NotFoundException("Product not found");
