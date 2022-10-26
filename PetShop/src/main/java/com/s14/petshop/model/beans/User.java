@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity(name = "users")
 @Setter
@@ -49,5 +48,5 @@ public class User {
             name = "users_have_favorite_products",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
-    Set<Product> likedProducts;
+    List<Product> favProducts;
 }

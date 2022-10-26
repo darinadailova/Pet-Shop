@@ -171,8 +171,10 @@ public class UserService extends AbstractService {
     public UserWithoutPasswordDTO addProductToFavorites(int pid, UserWithoutPasswordDTO currentUser) {
         Product product = productRepository.findProductById(pid)
                 .orElseThrow(() -> new NotFoundException("Product wasn't found"));
-        User user = modelMapper.map(currentUser, User.class);
-        user.getLikedProducts().add(product);
+        User user = userRepository.getById(currentUser.getId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        user.getFavProducts().add(product);
         userRepository.save(user);
         return modelMapper.map(user, UserWithoutPasswordDTO.class);
     }

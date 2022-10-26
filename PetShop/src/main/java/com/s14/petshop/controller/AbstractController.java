@@ -1,10 +1,12 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.ErrorDTO;
+import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.exceptions.UnauthorizedException;
 import com.s14.petshop.service.AddressService;
+import com.s14.petshop.service.CartService;
 import com.s14.petshop.service.ReviewService;
 import com.s14.petshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class AbstractController {
 
     public static final String LOGGED = "LOGGED";
     public static final String USER_ID = "USER_ID";
     public static final String REMOTE_IP = "REMOTE_IP";
+
+    public List<ProductForAddingInCartDTO> cart;
 
     @Autowired
     public UserService userService;
@@ -35,6 +38,9 @@ public abstract class AbstractController {
 
     @Autowired
     public ReviewService reviewService;
+
+    @Autowired
+    public CartService cartService;
 
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
