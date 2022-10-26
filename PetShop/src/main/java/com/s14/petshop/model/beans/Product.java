@@ -46,4 +46,7 @@ public class Product {
     @OneToMany(mappedBy = "reviewedProduct")
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "product")
+    List<ProductQuantity> quantities;
+
 }

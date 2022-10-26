@@ -1,7 +1,10 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.exceptions.BadRequestException;
-import com.s14.petshop.model.repositories.*;
+import com.s14.petshop.model.repositories.AddressRepository;
+import com.s14.petshop.model.repositories.ProductRepository;
+import com.s14.petshop.model.repositories.ReviewRepository;
+import com.s14.petshop.model.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,22 +22,9 @@ public abstract class AbstractService {
     @Autowired
     protected ReviewRepository reviewRepository;
 
-    @Autowired
-    protected ImageRepository imageRepository;
-
-    public void checkId(int id){
+    void checkId(int id){
         if(id < 1){
             throw new BadRequestException("Id must be positive");
         }
     }
-    public boolean checkImageExtension(String extension) {
-        extension = extension.toLowerCase();
-        return (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")
-                || extension.equals("gif") || extension.equals("raw") || extension.equals("svg") ||
-                extension.equals("heic"));
-
-    }
-
-
-
 }
