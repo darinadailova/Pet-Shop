@@ -4,6 +4,7 @@ import com.s14.petshop.model.beans.Image;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 
 @Service
 public class ImageService extends AbstractService {
+
 
     public Image addImage(MultipartFile file, Product owner) {
         try {
