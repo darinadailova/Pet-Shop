@@ -3,5 +3,10 @@ package com.s14.petshop.model.repositories;
 import com.s14.petshop.model.beans.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
+
+    List<Review> findAllByReviewedProductId(int pid);
+    List<Review> findAllByOwnerId(int uid);
 }

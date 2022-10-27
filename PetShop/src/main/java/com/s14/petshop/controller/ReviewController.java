@@ -2,6 +2,8 @@ package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.reviews.AddingReviewDTO;
 import com.s14.petshop.model.dtos.reviews.ReviewResponseDTO;
+import com.s14.petshop.model.dtos.reviews.ReviewResponseWithoutOwnerIdDTO;
+import com.s14.petshop.model.dtos.reviews.ReviewResponseWithoutProductIdDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class ReviewController extends AbstractController{
@@ -22,5 +25,15 @@ public class ReviewController extends AbstractController{
             throw new BadRequestException("Rating must be a number between 1 and 5");
         }
         return new ResponseEntity<>(reviewService.addReview(loggedUserId, addingReviewDTO, pid), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/{pid}/all-reviews")
+    public List<ReviewResponseWithoutProductIdDTO> getAllReviewsByProductId(@PathVariable int pid) {
+        return reviewService.getAllReviewsByProductId(pid);
+    }
+
+    @GetMapping("/users/{uid}/all-reviews")
+    public List<ReviewResponseWithoutOwnerIdDTO> getAllReviewsByUserId(@PathVariable int uid) {
+        return reviewService.getAllReviewsByUserId(uid);
     }
 }
