@@ -25,7 +25,7 @@ public class ImageService extends AbstractService {
                 throw new BadRequestException("Insert an image");
             }
 
-            String name = "product" + File.separator + System.nanoTime() + "-" + owner.getId() + "." + extension;
+            String name = "uploads" + File.separator + System.nanoTime() + "-" + owner.getId() + "." + extension;
             File file2 = new File(name);
             if (!file2.exists()) {
                 Files.copy(file.getInputStream(), file2.toPath());

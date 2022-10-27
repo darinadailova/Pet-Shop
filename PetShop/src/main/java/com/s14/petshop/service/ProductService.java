@@ -3,6 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Image;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.dao.ProductFilterDAO;
+import com.s14.petshop.model.dtos.images.ImageWithoutProductDTO;
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
 import com.s14.petshop.model.dtos.product.ProductFilterDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
@@ -13,8 +14,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService extends AbstractService {
@@ -138,7 +141,7 @@ public class ProductService extends AbstractService {
                 .orElseThrow(() -> new NotFoundException("Product does not exist!"));
         Image image = imageService.addImage(file, product);
 
-
-        return modelMapper.map(product, ProductResponseDTO.class);
+        ProductResponseDTO dto = modelMapper.map(product, ProductResponseDTO.class);
+        return dto;
     }
 }

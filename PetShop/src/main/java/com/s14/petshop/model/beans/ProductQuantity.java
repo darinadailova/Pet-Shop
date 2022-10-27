@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
+@Entity(name = "orders_have_products")
 @AllArgsConstructor
 @Getter
 @Setter

@@ -5,13 +5,16 @@ import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.beans.ProductQuantity;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.compositekeys.ProductQuantityKey;
+import com.s14.petshop.model.dtos.order.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
+import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -60,5 +63,50 @@ public class OrderService extends AbstractService{
             price += product.getPrice();
         }
         return price;
+    }
+
+    public List<ProductResponseDTO> getProducts(int uid, int oid) {
+        Order order = orderRepository.findById(oid)
+                .orElseThrow(() -> new NotFoundException("Order does not exist!"));
+        User user = userRepository.getById(uid).orElseThrow(() -> new NotFoundException("User does not exist"));
+
+        if(order.getOrderedBy().getId() != user.getId()){
+            throw  new BadRequestException("You can not see the products");
+        }
+
+        List<ProductQuantity> productsQuantity = productQuantityRepository.findAllByOrder_Id(oid);
+
+        List<ProductResponseDTO> result = new ArrayList<>();
+
+        for (ProductQuantity productQuantity : productsQuantity) {
+            result.add(modelMapper.map(productQuantity.getProduct(), ProductResponseDTO.class));
+        }
+
+        return result;
+    }
+
+    public OrderResponseDTO getOrder(int uid, int oid) {
+
+        Order order = orderRepository.findById(oid)
+                .orElseThrow(() -> new NotFoundException("Order does not exist!"));
+
+        User user = userRepository.getById(uid)
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
+
+        if(order.getOrderedBy().getId() != user.getId()){
+            throw new BadRequestException("You can not see the order");
+        }
+
+        List<ProductQuantity> productsQuantity = order.getQuantities();
+
+        List<ProductResponseDTO> productsDTO = new ArrayList<>();
+
+        for (ProductQuantity productQuantity : productsQuantity) {
+            productsDTO.add(modelMapper.map(productQuantity.getProduct(), ProductResponseDTO.class));
+        }
+
+        OrderResponseDTO responseDTO = modelMapper.map(order, OrderResponseDTO.class);
+        responseDTO.setProducts(productsDTO);
+        return responseDTO;
     }
 }
