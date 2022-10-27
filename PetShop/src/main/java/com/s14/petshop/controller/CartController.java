@@ -1,11 +1,10 @@
 package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
+import com.s14.petshop.model.dtos.product.ProductResponseDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,5 +19,17 @@ public class CartController extends AbstractController{
         checkIfUserIsLogged(request);
         cartService.addProductToCart(request, productId, quantity);
         return (List<ProductForAddingInCartDTO>) request.getSession().getAttribute("cart");
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<List<ProductForAddingInCartDTO>> getProductsFromCart(HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        return new ResponseEntity<>(cartService.getProducts(request), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cart")
+    public ResponseEntity<List<ProductForAddingInCartDTO>> deleteCart(HttpServletRequest request){
+        checkIfUserIsLogged(request);
+        return new ResponseEntity<>(cartService.deleteCart(request), HttpStatus.OK);
     }
 }

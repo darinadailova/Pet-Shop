@@ -2,7 +2,9 @@ package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
+import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.exceptions.NotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,4 +57,22 @@ public class CartService extends AbstractService {
         productRepository.save(product);
     }
 
+    public List<ProductForAddingInCartDTO> getProducts(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("cart") == null) {
+            throw new NotFoundException("The cart is empty");
+        }
+        List<ProductForAddingInCartDTO> products = (List<ProductForAddingInCartDTO>) session.getAttribute("cart");
+        return products;
+    }
+
+    public List<ProductForAddingInCartDTO> deleteCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("cart") == null) {
+            throw new NotFoundException("The cart is already empty");
+        }
+        session.setAttribute("cart", null);
+        List<ProductForAddingInCartDTO> products = (List<ProductForAddingInCartDTO>) session.getAttribute("cart");
+        return products;
+    }
 }

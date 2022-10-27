@@ -97,16 +97,7 @@ public class OrderService extends AbstractService{
             throw new BadRequestException("You can not see the order");
         }
 
-        List<ProductQuantity> productsQuantity = order.getQuantities();
 
-        List<ProductResponseDTO> productsDTO = new ArrayList<>();
-
-        for (ProductQuantity productQuantity : productsQuantity) {
-            productsDTO.add(modelMapper.map(productQuantity.getProduct(), ProductResponseDTO.class));
-        }
-
-        OrderResponseDTO responseDTO = modelMapper.map(order, OrderResponseDTO.class);
-        responseDTO.setProducts(productsDTO);
-        return responseDTO;
+        return modelMapper.map(order,OrderResponseDTO.class);
     }
 }
