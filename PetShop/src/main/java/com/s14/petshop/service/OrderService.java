@@ -1,11 +1,8 @@
 package com.s14.petshop.service;
 
-import com.s14.petshop.model.beans.Order;
-import com.s14.petshop.model.beans.Product;
-import com.s14.petshop.model.beans.ProductQuantity;
-import com.s14.petshop.model.beans.User;
+import com.s14.petshop.model.beans.*;
 import com.s14.petshop.model.compositekeys.ProductQuantityKey;
-import com.s14.petshop.model.dtos.order.OrderResponseDTO;
+import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -19,7 +16,7 @@ import java.util.List;
 
 @Service
 public class OrderService extends AbstractService{
-    public void makeAnOrder(int currentUserId, HttpSession session) {
+    public OrderResponseDTO makeAnOrder(int addressId, int currentUserId, HttpSession session) {
         User user = userRepository.getById(currentUserId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -31,8 +28,7 @@ public class OrderService extends AbstractService{
         Order order = new Order();
         order.setOrderedAt(LocalDateTime.now());
         order.setOrderedBy(user);
-        // todo set address for delivery
-        order.setAddressForDelivery(user.getAddresses().get(0));
+        order.setAddressForDelivery(checkIfAddressIsValid(user, addressId));
         order.setPrice(findTotalPriceOfOrder(cart));
         orderRepository.save(order);
 
@@ -50,6 +46,16 @@ public class OrderService extends AbstractService{
         orderRepository.save(order);
         user.getOrders().add(order);
         userRepository.save(user);
+        return modelMapper.map(order, OrderResponseDTO.class);
+    }
+
+    private Address checkIfAddressIsValid(User user, int addressId) {
+        Address address = addressRepository.getById(addressId)
+                .orElseThrow(() -> new NotFoundException("Address not found"));
+        if (!user.getAddresses().contains(address)) {
+            throw new BadRequestException("This address is not added to you profile");
+        }
+        return address;
     }
 
     private ProductQuantity createProductQuantity(Order order, Product product, int quantity) {
@@ -68,7 +74,8 @@ public class OrderService extends AbstractService{
     public List<ProductResponseDTO> getProducts(int uid, int oid) {
         Order order = orderRepository.findById(oid)
                 .orElseThrow(() -> new NotFoundException("Order does not exist!"));
-        User user = userRepository.getById(uid).orElseThrow(() -> new NotFoundException("User does not exist"));
+        User user = userRepository.getById(uid)
+                .orElseThrow(() -> new NotFoundException("User does not exist"));
 
         if(order.getOrderedBy().getId() != user.getId()){
             throw  new BadRequestException("You can not see the products");
@@ -86,17 +93,14 @@ public class OrderService extends AbstractService{
     }
 
     public OrderResponseDTO getOrder(int uid, int oid) {
-
         Order order = orderRepository.findById(oid)
                 .orElseThrow(() -> new NotFoundException("Order does not exist!"));
-
         User user = userRepository.getById(uid)
                 .orElseThrow(() -> new NotFoundException("User does not exist"));
 
         if(order.getOrderedBy().getId() != user.getId()){
             throw new BadRequestException("You can not see the order");
         }
-
 
         return modelMapper.map(order,OrderResponseDTO.class);
     }

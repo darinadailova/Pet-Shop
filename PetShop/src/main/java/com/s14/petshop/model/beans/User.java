@@ -45,7 +45,6 @@ public class User {
     @OneToMany(mappedBy = "orderedBy")
     private List<Order> orders;
 
-    // todo add one to many relationship with orders
     @ManyToMany
     @JoinTable(
             name = "users_have_favorite_products",

@@ -32,6 +32,4 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address addressForDelivery;
-
-    //todo add relation between user,address and order
 }

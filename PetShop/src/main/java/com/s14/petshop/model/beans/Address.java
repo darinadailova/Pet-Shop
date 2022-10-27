@@ -33,7 +33,6 @@ public class Address {
 
     @OneToMany(mappedBy = "addressForDelivery")
     private List<Order> orders;
-    // todo add one to many relationship with orders
 
     public boolean equals(Address obj) {
         if (! (this.owner.getId() == obj.owner.getId() && this.city.equals(obj.getCity()) &&

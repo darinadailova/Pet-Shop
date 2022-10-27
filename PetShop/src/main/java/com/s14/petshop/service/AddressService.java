@@ -4,19 +4,17 @@ import com.s14.petshop.model.beans.Address;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddingAddress;
 import com.s14.petshop.model.dtos.address.AddressWithOwnerIdDTO;
-import com.s14.petshop.model.dtos.user.UserWithoutPasswordDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class AddressService extends AbstractService{
-    public AddressWithOwnerIdDTO addAddress(AddingAddress address, UserWithoutPasswordDTO currentUser) {
-        User user = userRepository.findByEmail(currentUser.getEmail())
+    public AddressWithOwnerIdDTO addAddress(AddingAddress address, int currentUserId) {
+        User user = userRepository.getById(currentUserId)
                 .orElseThrow(() -> new NotFoundException("user not found!"));
 
         Address addressFroSavingInDb = modelMapper.map(address, Address.class);
@@ -40,13 +38,11 @@ public class AddressService extends AbstractService{
 
     public List<AddingAddress> getAllAddressesByUserId(int uid) {
         User user = userRepository.getById(uid)
-                .orElseThrow(() -> new NotFoundException("user not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         List<Address> addresses = addressRepository.findAllByOwnerId(uid);
-        List<AddingAddress> result =
-                addresses.stream()
-                .map(a -> modelMapper.map(a, AddingAddress.class))
-                .collect(Collectors.toList());
-        return result;
+        return addresses.stream()
+        .map(a -> modelMapper.map(a, AddingAddress.class))
+        .collect(Collectors.toList());
     }
 }

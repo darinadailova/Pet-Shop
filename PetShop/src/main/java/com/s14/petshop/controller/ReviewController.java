@@ -24,16 +24,16 @@ public class ReviewController extends AbstractController{
         if (addingReviewDTO.getRating() < 1 || addingReviewDTO.getRating() > 5) {
             throw new BadRequestException("Rating must be a number between 1 and 5");
         }
-        return new ResponseEntity<>(reviewService.addReview(loggedUserId, addingReviewDTO, pid), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.addReview(loggedUserId, addingReviewDTO, pid), HttpStatus.CREATED);
     }
 
     @GetMapping("/products/{pid}/all-reviews")
-    public List<ReviewResponseWithoutProductIdDTO> getAllReviewsByProductId(@PathVariable int pid) {
-        return reviewService.getAllReviewsByProductId(pid);
+    public ResponseEntity<List<ReviewResponseWithoutProductIdDTO>> getAllReviewsByProductId(@PathVariable int pid) {
+        return new ResponseEntity<>(reviewService.getAllReviewsByProductId(pid), HttpStatus.OK);
     }
 
     @GetMapping("/users/{uid}/all-reviews")
-    public List<ReviewResponseWithoutOwnerIdDTO> getAllReviewsByUserId(@PathVariable int uid) {
-        return reviewService.getAllReviewsByUserId(uid);
+    public ResponseEntity<List<ReviewResponseWithoutOwnerIdDTO>> getAllReviewsByUserId(@PathVariable int uid) {
+        return new ResponseEntity<>(reviewService.getAllReviewsByUserId(uid), HttpStatus.OK);
     }
 }

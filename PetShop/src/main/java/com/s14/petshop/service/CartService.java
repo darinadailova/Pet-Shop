@@ -17,6 +17,7 @@ public class CartService extends AbstractService {
     public void addProductToCart(HttpServletRequest request, int productId, int quantity) {
         Product product = productRepository.findProductById(productId)
                 .orElseThrow(() -> new NotFoundException("Product wasn't found"));
+
         if (product.getQuantity() < quantity) {
             throw new NotFoundException("We only have " + product.getQuantity() + " from this product");
         }
@@ -34,7 +35,7 @@ public class CartService extends AbstractService {
 
         for (ProductForAddingInCartDTO product2 : cart) {
             if (product2.getId() == productForAddingInCart.getId()) {
-                product.setQuantity(product.getQuantity() - quantity);
+                product.setQuantity(product.getQuantity() - quantity); // updating quantity in DB
                 quantity = product2.getRequestedQuantity() + quantity;
                 productForAddingInCart.setRequestedQuantity(quantity);
                 productForAddingInCart.setPrice(price * quantity);

@@ -27,8 +27,8 @@ public class UserController extends AbstractController {
     }
 
     @GetMapping("/users/{uid}")
-    public UserWithoutPasswordDTO getUserById(@PathVariable int uid) {
-        return userService.getById(uid);
+    public ResponseEntity<UserWithoutPasswordDTO> getUserById(@PathVariable int uid) {
+        return new ResponseEntity<>(userService.getById(uid), HttpStatus.OK);
     }
 
     @PostMapping("/users")
@@ -41,36 +41,37 @@ public class UserController extends AbstractController {
     }
 
     @GetMapping("/user/profile")
-    public UserWithoutPasswordDTO showUserProfile(HttpServletRequest request) {
+    public ResponseEntity<UserWithoutPasswordDTO> showUserProfile(HttpServletRequest request) {
         return getUserById(getLoggedUserId(request));
     }
 
     @PostMapping("/user/logout")
-    public void logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
+        return new ResponseEntity<>("Logged out", HttpStatus.OK);
     }
 
     @PutMapping("/user/profile")
     public ResponseEntity<UserWithoutPasswordDTO> editProfile(@Valid @RequestBody EditProfileUserDTO user, HttpServletRequest request) {
-        UserWithoutPasswordDTO u = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO u = getUserById(getLoggedUserId(request)).getBody();
         return new ResponseEntity<>(userService.editProfile(user, u), HttpStatus.OK);
     }
 
     @PutMapping("/user/profile/changePassword")
     public ResponseEntity<UserWithoutPasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO user, HttpServletRequest request) {
-        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request)).getBody();
         return new ResponseEntity<>(userService.changePassword(user, currentUser), HttpStatus.OK);
     }
 
     @PutMapping("/user/profile/newsletter")
     public ResponseEntity<UserWithoutPasswordDTO> subscribe(@RequestParam(name = "is_subscribed") boolean subscribe, HttpServletRequest request) {
-        UserWithoutPasswordDTO user = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO user = getUserById(getLoggedUserId(request)).getBody();
         return new ResponseEntity<>(userService.subscribe(subscribe, user), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/profile")
     public ResponseEntity<UserWithoutPasswordDTO> deleteUser(@Valid @RequestBody DeleteUserDTO userForDeleting, HttpServletRequest request) {
-        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request)).getBody();
         UserWithoutPasswordDTO result = userService.deleteUser(userForDeleting, currentUser);
         logout(request.getSession());
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -81,25 +82,26 @@ public class UserController extends AbstractController {
         if (pid < 1) {
             throw new NotFoundException("Product not found");
         }
-        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request)).getBody();
         return new ResponseEntity<>(userService.addProductToFavorites(pid, currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/user/profile/upload-picture")
-    public String uploadProfileImage(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
-        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
-        return userService.uploadProfileImage(file, currentUser);
+    public ResponseEntity<String> uploadProfileImage(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
+        UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request)).getBody();
+        return new ResponseEntity<>("Uploaded picture: " +
+                userService.uploadProfileImage(file, currentUser), HttpStatus.OK);
     }
 
     @GetMapping("/user/favorites")
-    public List<ProductResponseDTO> getFavProducts(HttpServletRequest request) {
+    public ResponseEntity<List<ProductResponseDTO>> getFavProducts(HttpServletRequest request) {
         int uid = getLoggedUserId(request);
-        return userService.getFavProducts(uid);
+        return new ResponseEntity<>(userService.getFavProducts(uid), HttpStatus.OK);
     }
 
     @GetMapping("/user/orders")
-    public List<OrderResponseDTO> getOrders(HttpServletRequest request) {
+    public ResponseEntity<List<OrderResponseDTO>> getOrders(HttpServletRequest request) {
         int uid = getLoggedUserId(request);
-        return userService.getOrders(uid);
+        return new ResponseEntity<>(userService.getOrders(uid), HttpStatus.OK);
     }
 }
