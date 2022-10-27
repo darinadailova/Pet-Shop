@@ -20,18 +20,14 @@ public class ImageService extends AbstractService {
     public Image addImage(MultipartFile file, Product owner) {
         try {
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-
             if (!checkImageExtension(extension)) {
                 throw new BadRequestException("Insert an image");
             }
 
             String name = "uploads" + File.separator + System.nanoTime() + "-" + owner.getId() + "." + extension;
             File file2 = new File(name);
-            if (!file2.exists()) {
-                Files.copy(file.getInputStream(), file2.toPath());
-            } else {
-                throw new BadRequestException("The file already exists.");
-            }
+
+            copyFile(file,file2);
 
             Image image = new Image();
             image.setImageUrl(name);

@@ -4,6 +4,11 @@ import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public abstract class AbstractService {
 
@@ -34,6 +39,15 @@ public abstract class AbstractService {
                 || extension.equals("gif") || extension.equals("raw") || extension.equals("svg") ||
                 extension.equals("heic"));
 
+    }
+
+    void copyFile(MultipartFile file, File file2) throws IOException {
+        if(!file2.exists()) {
+            Files.copy(file.getInputStream(), file2.toPath());
+        }
+        else{
+            throw new BadRequestException("The file already exists.");
+        }
     }
 
     void checkId(int id){

@@ -5,7 +5,6 @@ import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
-import com.s14.petshop.model.dtos.reviews.ReviewWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
@@ -191,14 +190,12 @@ public class UserService extends AbstractService {
             if (!checkImageExtension(extension)) {
                 throw new BadRequestException("Insert a picture");
             }
+
             String name = "uploads" + File.separator + System.nanoTime() + "-" + user.getId() + "." + extension;
             File file2 = new File(name);
-            if(!file2.exists()) {
-                Files.copy(file.getInputStream(), file2.toPath());
-            }
-            else{
-                throw new BadRequestException("The file already exists.");
-            }
+
+            copyFile(file,file2);
+
             if(user.getProfilePictureUrl() != null){
                 File old = new File(user.getProfilePictureUrl());
                 old.delete();
@@ -234,4 +231,6 @@ public class UserService extends AbstractService {
                 .map(o -> modelMapper.map(o, OrderResponseDTO.class))
                 .collect(Collectors.toList());
     }
+
 }
+
