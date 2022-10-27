@@ -3,6 +3,8 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
+import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
+import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.reviews.ReviewWithoutOwnerDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -213,5 +216,22 @@ public class UserService extends AbstractService {
         if(!user.isAdmin()){
             throw new UnauthorizedException("You have no rights!");
         }
+    }
+
+    public List<ProductResponseDTO> getFavProducts(int uid) {
+        User user = userRepository.getById(uid)
+                .orElseThrow(() -> new NotFoundException("User not found)"));
+
+        return user.getFavProducts().stream()
+                .map(p -> modelMapper.map(p, ProductResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<OrderResponseDTO> getOrders(int uid) {
+        User user = userRepository.getById(uid)
+                .orElseThrow(() -> new NotFoundException("User not found)"));
+        return user.getOrders().stream()
+                .map(o -> modelMapper.map(o, OrderResponseDTO.class))
+                .collect(Collectors.toList());
     }
 }

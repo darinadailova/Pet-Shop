@@ -1,5 +1,7 @@
 package com.s14.petshop.controller;
 
+import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
+import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class UserController extends AbstractController {
@@ -86,5 +89,17 @@ public class UserController extends AbstractController {
     public String uploadProfileImage(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
         UserWithoutPasswordDTO currentUser = getUserById(getLoggedUserId(request));
         return userService.uploadProfileImage(file, currentUser);
+    }
+
+    @GetMapping("/user/favorites")
+    public List<ProductResponseDTO> getFavProducts(HttpServletRequest request) {
+        int uid = getLoggedUserId(request);
+        return userService.getFavProducts(uid);
+    }
+
+    @GetMapping("/user/orders")
+    public List<OrderResponseDTO> getOrders(HttpServletRequest request) {
+        int uid = getLoggedUserId(request);
+        return userService.getOrders(uid);
     }
 }
