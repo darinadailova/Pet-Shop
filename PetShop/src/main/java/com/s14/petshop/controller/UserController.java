@@ -3,6 +3,7 @@ package com.s14.petshop.controller;
 import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.user.*;
+import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ import java.util.List;
 @RestController
 public class UserController extends AbstractController {
     @PostMapping("/user/auth")
-    public ResponseEntity<UserWithoutPasswordDTO> login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest req) {
+    public ResponseEntity<UserWithoutPasswordDTO> login(@Valid @RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+        if (request.getSession().getAttribute(LOGGED) != null && (boolean) request.getSession().getAttribute(LOGGED)) {
+            throw new BadRequestException("You are already logged in");
+        }
         loginDTO.setEmail(loginDTO.getEmail().trim());
         loginDTO.setPassword(loginDTO.getPassword().trim());
 
         UserWithoutPasswordDTO resultUser = userService.login(loginDTO);
-        loginUser(req, resultUser.getId());
+        loginUser(request, resultUser.getId());
         return new ResponseEntity<>(resultUser, HttpStatus.OK);
     }
 

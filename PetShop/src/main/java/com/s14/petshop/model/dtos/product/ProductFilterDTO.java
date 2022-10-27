@@ -20,7 +20,7 @@ public class ProductFilterDTO {
     private int brandId;
     private int discountId;
 
-    @NotBlank
+    @NotNull
     private int subcategoryId;
     private int rating;
 }
