@@ -9,7 +9,9 @@ import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AddressService extends AbstractService{
@@ -34,5 +36,17 @@ public class AddressService extends AbstractService{
             }
         }
         return false;
+    }
+
+    public List<AddingAddress> getAllAddressesByUserId(int uid) {
+        User user = userRepository.getById(uid)
+                .orElseThrow(() -> new NotFoundException("user not found"));
+
+        List<Address> addresses = addressRepository.findAllByOwnerId(uid);
+        List<AddingAddress> result =
+                addresses.stream()
+                .map(a -> modelMapper.map(a, AddingAddress.class))
+                .collect(Collectors.toList());
+        return result;
     }
 }

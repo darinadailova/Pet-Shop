@@ -22,6 +22,12 @@ public abstract class AbstractService {
     @Autowired
     protected ImageRepository imageRepository;
 
+    @Autowired
+    protected OrderRepository orderRepository;
+
+    @Autowired
+    protected ProductQuantityRepository productQuantityRepository;
+
      boolean checkImageExtension(String extension) {
         extension = extension.toLowerCase();
         return (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")

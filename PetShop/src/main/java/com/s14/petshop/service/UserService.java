@@ -42,8 +42,8 @@ public class UserService extends AbstractService {
         UserWithoutPasswordDTO u = modelMapper.map(user, UserWithoutPasswordDTO.class);
         u.setAddresses(u.getAddresses().stream()
                 .map(a -> modelMapper.map(a, AddressWithoutOwnerDTO.class)).collect(Collectors.toList()));
-        u.setReviews(u.getReviews().stream()
-                .map(r -> modelMapper.map(r, ReviewWithoutOwnerDTO.class)).collect(Collectors.toList()));
+//        u.setReviews(u.getReviews().stream()
+//                .map(r -> modelMapper.map(r, ReviewWithoutOwnerDTO.class)).collect(Collectors.toList()));
         return u;
     }
 

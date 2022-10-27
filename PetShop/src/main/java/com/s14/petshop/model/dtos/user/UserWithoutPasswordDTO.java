@@ -19,5 +19,5 @@ public class UserWithoutPasswordDTO {
     private boolean isAdmin;
     private String profilePictureUrl;
     private List<AddressWithoutOwnerDTO> addresses;
-    private List<ReviewWithoutOwnerDTO> reviews;
+//    private List<ReviewWithoutOwnerDTO> reviews;
 }
