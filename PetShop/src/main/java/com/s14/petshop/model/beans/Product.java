@@ -47,6 +47,6 @@ public class Product {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "product")
-    List<ProductQuantity> quantities;
+    private List<ProductQuantity> quantities;
 
 }

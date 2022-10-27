@@ -23,7 +23,7 @@ public class Order {
     private LocalDateTime orderedAt;
 
     @OneToMany(mappedBy = "order")
-    List<ProductQuantity> quantities;
+    private List<ProductQuantity> quantities;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

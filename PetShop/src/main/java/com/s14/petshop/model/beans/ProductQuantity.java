@@ -6,11 +6,11 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity(name = "orders_have_products")
 public class ProductQuantity {
 
     @EmbeddedId
