@@ -1,4 +1,4 @@
-package com.s14.petshop.model.dtos.reviews;
+package com.s14.petshop.model.dtos.review;
 
 import lombok.Data;
 

@@ -17,22 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 public class DiscountResponseDTO {
 
-    @NotNull
     private int id;
-
-    @NotBlank
     private String name;
-
-    @NotNull
-    @Min(1)
-    @Max(70)
     private int percentDiscount;
-
-    @NotNull
     private LocalDateTime startAt;
-
-    @NotNull
     private LocalDateTime endAt;
-
-
 }

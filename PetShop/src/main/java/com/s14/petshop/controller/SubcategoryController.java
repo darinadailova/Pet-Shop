@@ -2,7 +2,7 @@ package com.s14.petshop.controller;
 
 import com.s14.petshop.model.dtos.category.CategoryResponseDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryAddDTO;
-import com.s14.petshop.model.dtos.subcategory.SubcategoryDTO;
+import com.s14.petshop.model.dtos.subcategory.SubcategoryResponseDTO;
 import com.s14.petshop.service.SubcategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +21,14 @@ public class SubcategoryController extends AbstractController {
     private SubcategoryService subcategoryService;
 
     @GetMapping("subcategories/{sid}")
-    public ResponseEntity<SubcategoryDTO> getSubcategoryById(@PathVariable int sid, HttpServletRequest request){
+    public ResponseEntity<SubcategoryResponseDTO> getSubcategoryById(@PathVariable int sid, HttpServletRequest request){
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(subcategoryService.getById(sid), HttpStatus.OK);
     }
 
     @PostMapping("/subcategories")
-    public ResponseEntity<SubcategoryDTO> addSubcategory(@Valid @RequestBody SubcategoryAddDTO dto, HttpServletRequest request){
+    public ResponseEntity<SubcategoryResponseDTO> addSubcategory(@Valid @RequestBody SubcategoryAddDTO dto, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);
@@ -45,7 +45,7 @@ public class SubcategoryController extends AbstractController {
     }
 
     @DeleteMapping("/subcategories/{sid}")
-    public ResponseEntity<SubcategoryDTO> deleteCategory(@PathVariable int sid, HttpServletRequest request){
+    public ResponseEntity<SubcategoryResponseDTO> deleteCategory(@PathVariable int sid, HttpServletRequest request){
         checkIfUserIsLogged(request);
         HttpSession session = request.getSession();
         int userId = (int) session.getAttribute(USER_ID);

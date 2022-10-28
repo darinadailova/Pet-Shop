@@ -18,21 +18,10 @@ import java.util.List;
 
 public class DiscountWithProductsDTO {
 
-    @NotNull
     private int id;
-
-    @NotBlank
     private String name;
-
-    @NotNull
-    @Min(1)
-    @Max(70)
     private int percentDiscount;
-
-    @NotNull
     private LocalDateTime startAt;
-
-    @NotNull
     private LocalDateTime endAt;
 
     private List<ProductWithoutDiscountDTO> products;

@@ -2,7 +2,6 @@ package com.s14.petshop.model.dtos.product;
 
 import com.s14.petshop.model.dtos.brand.BrandResponseDTO;
 import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
-import com.s14.petshop.model.dtos.subcategory.SubcategoryDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryWithoutProductsDTO;
 
 import javax.validation.constraints.NotBlank;

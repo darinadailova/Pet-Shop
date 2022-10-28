@@ -6,23 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Setter
 @Getter
 @NoArgsConstructor
 
-public class SubcategoryDTO {
+public class SubcategoryResponseDTO {
 
-    @NotNull
     private int id;
-
-    @NotBlank
     private String name;
-
-    @NotNull
     private CategoryWithoutSubsDTO category;
 
     private List<ProductWithoutSubDTO> products;

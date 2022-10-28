@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 public class AddressController extends AbstractController{
 
-    @PostMapping("/user/profile/add-address")
+    @PostMapping("/users/profile/add-address")
     public ResponseEntity<AddressWithOwnerIdDTO> addAddress(@Valid @RequestBody AddingAddress address, HttpServletRequest request) {
         int currentUserId = getLoggedUserId(request);
         return new ResponseEntity<>(addressService.addAddress(address, currentUserId), HttpStatus.CREATED);

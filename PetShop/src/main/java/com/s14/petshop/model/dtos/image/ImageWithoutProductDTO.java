@@ -1,9 +1,6 @@
-package com.s14.petshop.model.dtos.images;
+package com.s14.petshop.model.dtos.image;
 
-import com.s14.petshop.model.dtos.product.ProductWithoutImagesDTO;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class ImageWithoutProductDTO {

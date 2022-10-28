@@ -1,9 +1,9 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.reviews.AddingReviewDTO;
-import com.s14.petshop.model.dtos.reviews.ReviewResponseDTO;
-import com.s14.petshop.model.dtos.reviews.ReviewResponseWithoutOwnerIdDTO;
-import com.s14.petshop.model.dtos.reviews.ReviewResponseWithoutProductIdDTO;
+import com.s14.petshop.model.dtos.review.AddingReviewDTO;
+import com.s14.petshop.model.dtos.review.ReviewResponseDTO;
+import com.s14.petshop.model.dtos.review.ReviewResponseWithoutOwnerIdDTO;
+import com.s14.petshop.model.dtos.review.ReviewResponseWithoutProductIdDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

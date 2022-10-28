@@ -1,6 +1,6 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
+import com.s14.petshop.model.dtos.order.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

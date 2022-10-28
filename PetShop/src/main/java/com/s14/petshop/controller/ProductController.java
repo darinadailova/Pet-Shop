@@ -50,8 +50,8 @@ public class ProductController extends AbstractController {
         return new ResponseEntity<>(productService.addProduct(dto), HttpStatus.OK);
     }
 
-    @GetMapping("/product/search/{name}")
-    public ResponseEntity<ProductResponseDTO> searchProductByName(@PathVariable String name, HttpServletRequest request) {
+    @GetMapping("/products/search")
+    public ResponseEntity<ProductResponseDTO> searchProductByName(@RequestParam String name, HttpServletRequest request) {
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(productService.searchWithName(name), HttpStatus.OK);

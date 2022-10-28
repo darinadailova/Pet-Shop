@@ -16,11 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryResponseDTO {
 
-    @NotNull
     private int id;
-
-    @NotBlank
     private String name;
-
     private List<SubcategoryWithoutCategoryDTO> subcategories;
 }

@@ -4,7 +4,7 @@ import com.s14.petshop.model.beans.Category;
 import com.s14.petshop.model.beans.Subcategory;
 import com.s14.petshop.model.dtos.category.CategoryResponseDTO;
 import com.s14.petshop.model.dtos.subcategory.SubcategoryAddDTO;
-import com.s14.petshop.model.dtos.subcategory.SubcategoryDTO;
+import com.s14.petshop.model.dtos.subcategory.SubcategoryResponseDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;
 import com.s14.petshop.model.repositories.SubcategoryRepository;
@@ -22,15 +22,15 @@ public class SubcategoryService extends AbstractService {
     @Autowired
     private CategoryService categoryService;
 
-    public SubcategoryDTO getById(int sid) {
+    public SubcategoryResponseDTO getById(int sid) {
         checkId(sid);
         Subcategory subcategory = subcategoryRepository.findById(sid)
                 .orElseThrow(() -> new NotFoundException("Subcategory does not exist!"));
-        SubcategoryDTO dto = modelMapper.map(subcategory, SubcategoryDTO.class);
+        SubcategoryResponseDTO dto = modelMapper.map(subcategory, SubcategoryResponseDTO.class);
         return dto;
     }
 
-    public SubcategoryDTO addSubcategory(SubcategoryAddDTO dto) {
+    public SubcategoryResponseDTO addSubcategory(SubcategoryAddDTO dto) {
         if (subcategoryRepository.existsByName(dto.getName())) {
             throw new BadRequestException("Subcategory already exists!");
         }
@@ -40,7 +40,7 @@ public class SubcategoryService extends AbstractService {
         subcategory.setCategory(category);
         subcategoryRepository.save(subcategory);
 
-        SubcategoryDTO resultDTO = modelMapper.map(subcategory, SubcategoryDTO.class);
+        SubcategoryResponseDTO resultDTO = modelMapper.map(subcategory, SubcategoryResponseDTO.class);
         return resultDTO;
     }
 
@@ -54,11 +54,11 @@ public class SubcategoryService extends AbstractService {
         return categoryService.getAllCategories();
     }
 
-    public SubcategoryDTO deleteSubcategory(int sid) {
+    public SubcategoryResponseDTO deleteSubcategory(int sid) {
         checkId(sid);
         Subcategory subcategory = subcategoryRepository.findById(sid)
                 .orElseThrow(() ->  new NotFoundException("Subcategory cannot be deleted!"));
-        SubcategoryDTO dto = modelMapper.map(subcategory, SubcategoryDTO.class);
+        SubcategoryResponseDTO dto = modelMapper.map(subcategory, SubcategoryResponseDTO.class);
 
         subcategoryRepository.delete(subcategory);
         return dto;

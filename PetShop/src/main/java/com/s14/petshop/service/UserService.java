@@ -3,7 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
-import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
+import com.s14.petshop.model.dtos.order.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;

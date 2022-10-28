@@ -13,14 +13,7 @@ import javax.validation.constraints.NotNull;
 
 public class BrandResponseDTO {
 
-    @NotNull
     private int id;
-
-    @NotBlank
     private String name;
-
-    @NotNull
     private String logoUrl;
-
-    //List<ProductWithoutBrandDTO> products;
 }
