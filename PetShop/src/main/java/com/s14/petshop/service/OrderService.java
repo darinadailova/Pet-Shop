@@ -10,12 +10,14 @@ import com.s14.petshop.model.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderService extends AbstractService{
+    @Transactional
     public OrderResponseDTO makeAnOrder(int addressId, int currentUserId, HttpSession session) {
         User user = userRepository.getById(currentUserId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
