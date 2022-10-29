@@ -17,6 +17,9 @@ public class DiscountService extends AbstractService {
     @Autowired
     private DiscountRepository discountRepository;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
     public DiscountWithProductsDTO getById(int did) {
         checkId(did);
         Discount discount = getAllDiscountById(did);
@@ -30,6 +33,8 @@ public class DiscountService extends AbstractService {
         }
         Discount discount = modelMapper.map(dto, Discount.class);
         discountRepository.save(discount);
+
+        emailSenderService.sendEmailToAllSubscribedUsers(discount);
 
         DiscountResponseDTO resultDTO = modelMapper.map(discount, DiscountResponseDTO.class);
         return resultDTO;
