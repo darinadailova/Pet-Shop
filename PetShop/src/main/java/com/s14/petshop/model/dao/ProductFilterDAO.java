@@ -54,11 +54,36 @@ public class ProductFilterDAO {
             public void setValues(PreparedStatement ps) throws SQLException {
                 if(rating > 0 ){
                     ps.setInt(1,rating);
+                    ps.setInt(2,subcategoryId);
+                    ps.setDouble(3,minPrice);
+                    ps.setDouble(4,maxPrice);
                 }
                 else{
-                    ps.setDouble(1,minPrice);
-                    ps.setDouble(2,maxPrice);
+                    ps.setInt(1,subcategoryId);
+                    ps.setDouble(2,minPrice);
+                    ps.setDouble(3,maxPrice);
                 }
+
+                if(rating > 0 && brand_id > 0){
+                    ps.setInt(5,brand_id);
+                }
+                else if(brand_id > 0){
+                    ps.setInt(4,brand_id);
+                }
+
+                if(rating > 0 && brand_id > 0 && discount_id > 0){
+                    ps.setInt(6,discount_id);
+                }
+                else if(rating > 0 && discount_id > 0){
+                    ps.setInt(5,discount_id);
+                }
+                else if(brand_id > 0 && discount_id > 0){
+                    ps.setInt(5,discount_id);
+                }
+                else if(discount_id > 0){
+                    ps.setInt(4,discount_id);
+                }
+                System.out.println(ps.toString());
             }
         }, resultSet -> {
             result.add(resultSet.getInt("id"));
