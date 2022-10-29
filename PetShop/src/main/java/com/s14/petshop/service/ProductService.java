@@ -3,7 +3,6 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Image;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.dao.ProductFilterDAO;
-import com.s14.petshop.model.dtos.images.ImageWithoutProductDTO;
 import com.s14.petshop.model.dtos.product.ProductAddDTO;
 import com.s14.petshop.model.dtos.product.ProductFilterDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService extends AbstractService {

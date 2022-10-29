@@ -3,7 +3,7 @@ package com.s14.petshop.service;
 import com.s14.petshop.model.beans.Product;
 import com.s14.petshop.model.beans.User;
 import com.s14.petshop.model.dtos.address.AddressWithoutOwnerDTO;
-import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
+import com.s14.petshop.model.dtos.order.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.dtos.user.*;
 import com.s14.petshop.model.exceptions.BadRequestException;
@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -110,7 +109,9 @@ public class UserService extends AbstractService {
             userForSavingInDb.setAdmin(true);
         }
         userRepository.save(userForSavingInDb);
-        return modelMapper.map(userForRegistration, UserWithoutPasswordDTO.class);
+        User user1 = userRepository.findByEmail(userForSavingInDb.getEmail())
+                .orElseThrow(() -> new NotFoundException("user not found"));
+        return modelMapper.map(user1, UserWithoutPasswordDTO.class);
     }
 
     private boolean isUserAdmin(String email) {
@@ -128,15 +129,16 @@ public class UserService extends AbstractService {
     }
 
     public UserWithoutPasswordDTO editProfile(EditProfileUserDTO user, UserWithoutPasswordDTO u) {
-        User user2 = userRepository.findByEmail(u.getEmail())
+        User user2 = userRepository.getById(u.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         if (!user.getRepeatPassword().equals(user.getPassword())) {
             throw new BadRequestException("Passwords don't match!");
         }
-        if (!user.getPassword().equals(user2.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(user.getPassword(), user2.getPassword())) {
             throw new BadRequestException("Wrong password");
         }
         modelMapper.map(user, user2);
+        user2.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user2);
         return modelMapper.map(user2, UserWithoutPasswordDTO.class);
     }

@@ -2,7 +2,7 @@ package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.*;
 import com.s14.petshop.model.compositekeys.ProductQuantityKey;
-import com.s14.petshop.model.dtos.orders.OrderResponseDTO;
+import com.s14.petshop.model.dtos.order.OrderResponseDTO;
 import com.s14.petshop.model.dtos.product.ProductForAddingInCartDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
