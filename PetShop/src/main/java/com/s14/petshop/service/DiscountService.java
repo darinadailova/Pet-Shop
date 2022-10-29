@@ -1,6 +1,7 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Discount;
+import com.s14.petshop.model.dao.EmailDAO;
 import com.s14.petshop.model.dtos.discount.DiscountAddDTO;
 import com.s14.petshop.model.dtos.discount.DiscountResponseDTO;
 import com.s14.petshop.model.dtos.discount.DiscountWithProductsDTO;
@@ -17,6 +18,9 @@ public class DiscountService extends AbstractService {
     @Autowired
     private DiscountRepository discountRepository;
 
+    @Autowired
+    EmailDAO dao;
+
     public DiscountWithProductsDTO getById(int did) {
         checkId(did);
         Discount discount = getAllDiscountById(did);
@@ -32,6 +36,7 @@ public class DiscountService extends AbstractService {
         discountRepository.save(discount);
 
         DiscountResponseDTO resultDTO = modelMapper.map(discount, DiscountResponseDTO.class);
+
         return resultDTO;
     }
 

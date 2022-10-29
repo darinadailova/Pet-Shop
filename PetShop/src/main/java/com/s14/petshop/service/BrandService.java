@@ -1,7 +1,7 @@
 package com.s14.petshop.service;
 
 import com.s14.petshop.model.beans.Brand;
-import com.s14.petshop.model.dtos.brand.BrandAddDTO;
+import com.s14.petshop.model.dao.EmailDAO;
 import com.s14.petshop.model.dtos.brand.BrandResponseDTO;
 import com.s14.petshop.model.exceptions.BadRequestException;
 import com.s14.petshop.model.exceptions.NotFoundException;

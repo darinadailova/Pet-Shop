@@ -4,9 +4,12 @@ import com.s14.petshop.model.dtos.product.ProductFilterDTO;
 import com.s14.petshop.model.dtos.product.ProductResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,26 +32,37 @@ public class ProductFilterDAO {
 
         if(rating > 0){
             sql.append("JOIN reviews AS r ON p.id = r.product_id " +
-                    "WHERE r.rating =" + rating + " AND ");
+                    "WHERE r.rating = ? AND ");
         }
         else{
             sql.append(" WHERE ");
         }
 
-        sql.append(" sc.id =" + subcategoryId + " AND p.price BETWEEN " + minPrice + " AND " + maxPrice);
+        sql.append(" sc.id = ? AND p.price BETWEEN ? AND ?");
         if (brand_id > 0) {
-            sql.append(" AND p.brand_id = " + brand_id);
+            sql.append(" AND p.brand_id = ?");
         }
 
         if (discount_id > 0){
-            sql.append(" AND p.discount_id = " + discount_id);
+            sql.append(" AND p.discount_id = ?");
         }
         System.out.println(sql);
 
         List<Integer> result = new ArrayList<>();
-        jdbcTemplate.query(sql.toString(), resultSet ->{
+        jdbcTemplate.query(sql.toString(), new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                if(rating > 0 ){
+                    ps.setInt(1,rating);
+                }
+                else{
+                    ps.setDouble(1,minPrice);
+                    ps.setDouble(2,maxPrice);
+                }
+            }
+        }, resultSet -> {
             result.add(resultSet.getInt("id"));
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 result.add(resultSet.getInt("id"));
             }
         });

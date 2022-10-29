@@ -1,20 +1,17 @@
 package com.s14.petshop.controller;
 
-import com.s14.petshop.model.dtos.brand.BrandAddDTO;
 import com.s14.petshop.model.dtos.brand.BrandResponseDTO;
 import com.s14.petshop.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @RestController
 public class BrandController extends AbstractController {
