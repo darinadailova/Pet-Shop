@@ -51,7 +51,7 @@ public class ProductController extends AbstractController {
     }
 
     @GetMapping("/products/search")
-    public ResponseEntity<ProductResponseDTO> searchProductByName(@RequestParam String name, HttpServletRequest request) {
+    public ResponseEntity<List<ProductResponseDTO>> searchProductByName(@RequestParam String name, HttpServletRequest request) {
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(productService.searchWithName(name), HttpStatus.OK);
@@ -77,7 +77,7 @@ public class ProductController extends AbstractController {
         return new ResponseEntity<>(productService.editProduct(dto,pid), HttpStatus.OK);
     }
 
-    @GetMapping("/products/filter")
+    @PostMapping("/products/filter")
     public ResponseEntity<List<ProductResponseDTO>> filterProducts(@Valid @RequestBody ProductFilterDTO dto, HttpServletRequest request){
         checkIfUserIsLogged(request);
 

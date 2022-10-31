@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService extends AbstractService {
@@ -64,7 +65,9 @@ public class ProductService extends AbstractService {
         product.setInfo(dto.getInfo());
         product.setPrice(dto.getPrice());
         product.setBrand(brandService.getById(dto.getBrand_id()));
-        product.setDiscount(discountService.getAllDiscountById(dto.getDiscount_id()));
+        if(dto.getDiscount_id() > 0) {
+            product.setDiscount(discountService.getAllDiscountById(dto.getDiscount_id()));
+        }
         product.setSubcategory(subcategoryService.getAllSubById(dto.getSubcategory_id()));
         product.setQuantity(1);
 
@@ -83,14 +86,18 @@ public class ProductService extends AbstractService {
         return dto;
     }
 
-    public ProductResponseDTO searchWithName(String dto) {
-        if (dto == null || dto.isEmpty()) {
+    public List<ProductResponseDTO> searchWithName(String name) {
+        if (name == null || name.isEmpty()) {
             throw new BadRequestException("Enter name for searching");
         }
-        Product product = productRepository.findByNameIsLikeIgnoreCase(dto)
-                .orElseThrow(() -> new NotFoundException("Product does not exist"));
-        ProductResponseDTO dtoResult = modelMapper.map(product, ProductResponseDTO.class);
-        return dtoResult;
+        List<Product> products = productRepository.findAllByNameIsLikeIgnoreCase("%" + name + "%");
+
+        List<ProductResponseDTO> result = new ArrayList<>();
+        for (Product product : products) {
+            result.add(modelMapper.map(product,ProductResponseDTO.class));
+        }
+
+        return result;
     }
 
     public ProductResponseDTO addDiscountToProduct(int pid, int did) {
