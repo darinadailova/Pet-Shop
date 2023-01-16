@@ -78,7 +78,7 @@ public class ProductController extends AbstractController {
     }
 
     @PostMapping("/products/filter")
-    public ResponseEntity<List<ProductResponseDTO>> filterProducts(@Valid @RequestBody ProductFilterDTO dto, HttpServletRequest request){
+    public ResponseEntity<List<ProductResponseDTO>> filterProducts(@Valid @RequestBody ProductFilterDTO dto, HttpServletRequest request) {
         checkIfUserIsLogged(request);
 
         return new ResponseEntity<>(productService.filterProducts(dto), HttpStatus.OK);

@@ -31,7 +31,11 @@ public class CartService extends AbstractService {
 
         ProductForAddingInCartDTO productForAddingInCart = modelMapper.map(product, ProductForAddingInCartDTO.class);
         // calculate price for a single item
-        double price = product.getPrice() - (product.getPrice() * (product.getDiscount().getPercentDiscount() * 0.01));
+        double price = product.getPrice();
+        if (product.getDiscount() != null) {
+            price = product.getPrice() - (product.getPrice() * (product.getDiscount().getPercentDiscount() * 0.01));
+
+        }
 
         for (ProductForAddingInCartDTO product2 : cart) {
             if (product2.getId() == productForAddingInCart.getId()) {

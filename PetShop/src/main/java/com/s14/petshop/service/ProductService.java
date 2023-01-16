@@ -47,8 +47,11 @@ public class ProductService extends AbstractService {
         Product product = productRepository.findByName(dto.getName()).orElse(new Product());
         if (product.getQuantity() > 0) {
             product.setQuantity(product.getQuantity() + 1);
-            productRepository.save(product);
+            System.out.println(product.getPrice());
+            product = productRepository.save(product);
+            System.out.println(product.getPrice());
             ProductResponseDTO dtoResult = modelMapper.map(product, ProductResponseDTO.class);
+            System.out.println(dtoResult.getPrice());
             return dtoResult;
         }
         product = createProduct(dto);

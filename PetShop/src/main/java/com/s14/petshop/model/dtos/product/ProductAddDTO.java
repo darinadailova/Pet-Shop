@@ -19,8 +19,7 @@ public class ProductAddDTO {
     @Length(min = 2, max = 45, message =  "Product name must be between 2 and 45 characters")
     private String name;
 
-    @NotNull
-    @Min(1)
+
     private double price;
 
     @NotBlank

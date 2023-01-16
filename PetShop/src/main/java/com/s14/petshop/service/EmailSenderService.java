@@ -53,7 +53,7 @@ public class EmailSenderService extends AbstractService {
             public void run() {
                 for (String email : emailsOfSubscribedUsers) {
                    sendEmail(email, discount.getName() + " starts with up to " + discount.getPercentDiscount()
-                   + " percent discount", "Take a look at all discounted products at: pisi.bg\n" +
+                   + " percent discounts", "Take a look at all discounted products at: pisi.bg\n" +
                            "The sale end at " + discount.getEndAt());
                 }
             }
